@@ -86,6 +86,56 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
 .party-burst{position:fixed;z-index:100;pointer-events:none;animation:burst .75s ease-out forwards;font-size:20px;line-height:1;text-shadow:1px 1px #4b2a9c}
 @keyframes burst{0%{opacity:0;transform:translate(0,0) scale(.4)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.2)}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}}
+
+/* ===== SECRET PAGE ===== */
+
+/* 見えない隠しボタン */
+.secret-trigger{
+  display:inline-block;
+  width:22px;
+  height:38px;
+  margin-left:2px;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  vertical-align:middle;
+}
+
+.secret-trigger:focus-visible{
+  outline:2px dashed var(--y);
+  outline-offset:2px;
+}
+
+/* 隠しページ */
+.secret-content{
+  text-align:center;
+  padding:30px 12px;
+}
+
+.secret-content h2{
+  color:var(--y);
+  letter-spacing:.12em;
+}
+
+.secret-content p{
+  line-height:2;
+  margin:22px 0;
+}
+
+.secret-text{
+  white-space:pre-line;
+}
+
+.secret-credit{
+  color:var(--pl);
+  font-size:14px;
+  margin-top:35px;
+}
+
+
+ 
+
 </style>
 </head>
 <body>
@@ -120,11 +170,12 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
     <div class="stat">MP<span class="bar"><i class="mp" id="mp"></i></span><b id="mpv"></b></div>
     <div>MAIN QUEST<br><b class="y">HAPPY BIRTHDAY!</b></div>
     <div class="party-row">ITEM
-     <button class="party-icon" type="button" aria-label="パフェ"><i data-s="parfait" data-z="3"></i></button>
-     <button class="party-icon" type="button" aria-label="宝石"><i data-s="gem" data-z="3"></i></button>
-     <button class="party-icon" type="button" aria-label="いちご"><i data-s="berry" data-z="3"></i></button>
-     <button class="party-icon" type="button" aria-label="プレゼント"><i data-s="present" data-z="3"></i></button>
-    </div>
+ <button class="party-icon" type="button" aria-label="パフェ"><i data-s="parfait" data-z="3"></i></button>
+ <button class="party-icon" type="button" aria-label="宝石"><i data-s="gem" data-z="3"></i></button>
+ <button class="party-icon" type="button" aria-label="いちご"><i data-s="berry" data-z="3"></i></button>
+ <button class="party-icon" type="button" aria-label="プレゼント"><i data-s="present" data-z="3"></i></button>
+ <button class="secret-trigger" type="button" data-go="secret" aria-label="SECRET"></button>
+</div>
    </div>
   </div>
  </div>
@@ -169,6 +220,21 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
  </div>
  <p class="note" data-i="msg_note"></p>
 </section>
+
+<section id="v-secret" class="view" hidden>
+ <div class="win secret-content">
+  <h2>SECRET PAGE</h2>
+
+  <p data-i="secret_title"></p>
+
+  <p class="secret-text" data-i="secret_text"></p>
+
+  <div class="secret-credit" data-i="secret_credit"></div>
+
+  <button class="btn" type="button" data-go="top" data-i="secret_back"></button>
+ </div>
+</section>
+
 </main>
 
 <div class="mo" id="mo" role="dialog" aria-modal="true">
@@ -505,7 +571,10 @@ ja:{
  next:'つぎへ',
  again:'はじめにもどる',
  t_ILLUSTRATION:'イラスト',
- t_NOVEL:'小説'
+ t_NOVEL:'小説',
+secret_title:'들켰다!',
+secret_text:'안녕하세요. 잘 지내고 계신가요?\n매일 즐겁게 보내고 계신가요?\n\n이번 기획은 다윤님께서 시작해 주셨고, nico와 함께 만들었습니다.\n\n아직 서툰 부분도 있겠지만, 마기 여러분과 토키님 모두에게 기쁜 선물이 되었으면 좋겠습니다.\n\n언제나 토키님을 소중히 여기고 사랑하는 마기들이 곁에 있습니다.\n토키님의 하루하루가 사랑으로 가득하고, 언제나 웃음이 넘치기를 바랍니다!\n\n토키님, 사랑합니다.\n영원한 스물아홉 살을 위하여, 건배!',
+secret_back:'처음으로 돌아가기'
 },
 ko:{
  nav_top:'처음으로',
@@ -531,7 +600,10 @@ ko:{
  next:'다음',
  again:'처음으로',
  t_ILLUSTRATION:'일러스트',
- t_NOVEL:'소설'
+ t_NOVEL:'小説',
+secret_title:'들켰다!',
+secret_text:'안녕하세요. 잘 지내고 계신가요?\n매일 즐겁게 보내고 계신가요?\n\n이번 기획은 다윤님께서 시작해 주셨고, nico와 함께 만들었습니다.\n\n아직 서툰 부분도 있겠지만, 마기 여러분과 토키님 모두에게 기쁜 선물이 되었으면 좋겠습니다.\n\n언제나 토키님을 소중히 여기고 사랑하는 마기들이 곁에 있습니다.\n토키님의 하루하루가 사랑으로 가득하고, 언제나 웃음이 넘치기를 바랍니다!\n\n토키님, 사랑합니다.\n영원한 스물아홉 살을 위하여, 건배!',
+secret_back:'처음으로 돌아가기'
 }
 };
 
