@@ -897,6 +897,7 @@ const el=(t,c,x)=>{
 /* ===== 効果音（iPhone / Safari 対応） ===== */
 let audioCtx=null;
 let masterGain=null;
+let activeSounds=new Set();
 
 function getAudio(){
  const AC=window.AudioContext||window.webkitAudioContext;
@@ -934,6 +935,15 @@ function sound(freq,end,duration,volume=.025,type='square',delay=0){
 
   osc.connect(gain);
   gain.connect(masterGain);
+
+  activeSounds.add(osc);
+
+  osc.onended=()=>{
+   activeSounds.delete(osc);
+   osc.disconnect();
+   gain.disconnect();
+  };
+
   osc.start(start);
   osc.stop(start+duration+.025);
  };
@@ -947,6 +957,17 @@ function sound(freq,end,duration,volume=.025,type='square',delay=0){
    console.warn('Audio could not start:',error);
   });
  }
+}
+
+/* 再生中の音をすべて停止 */
+function stopAllSounds(){
+ activeSounds.forEach(osc=>{
+  try{
+   osc.stop();
+  }catch(e){}
+ });
+
+ activeSounds.clear();
 }
 
 function playPew(){
@@ -1293,6 +1314,11 @@ let tm;
 let typing=false;
 
 function route(){
+ // 前のページの文字送りと音声を停止
+ clearInterval(tm);
+ typing=false;
+ stopAllSounds();
+
  const h=location.hash.slice(1);
  const v=['gallery','messages','secret'].includes(h)?h:'top';
 
