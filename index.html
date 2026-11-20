@@ -605,6 +605,44 @@ h1 {
   font-size:12px;
   letter-spacing:.08em;
 }
+
+/* ===== エンディング ===== */
+.ending-content {
+  text-align:center;
+  padding:34px 16px;
+}
+.ending-kicker {
+  color:var(--y);
+  letter-spacing:.18em;
+  font-size:14px;
+}
+.ending-title {
+  color:var(--y);
+  font-size:clamp(30px,8vw,48px);
+  line-height:1.25;
+  margin:12px 0;
+  text-shadow:4px 4px 0 var(--ink);
+}
+.ending-message {
+  color:#fff;
+  font-size:18px;
+  margin:22px 0 8px;
+}
+.ending-birthday {
+  color:var(--y);
+  font-size:clamp(19px,5vw,26px);
+  margin:8px 0 22px;
+}
+.ending-stars {
+  color:var(--y);
+  font-size:24px;
+  letter-spacing:.35em;
+  animation:bl .8s steps(2) infinite;
+}
+.ending-content .btn {
+  margin-top:12px;
+}
+
 </style>
 
 </head>
@@ -657,6 +695,22 @@ h1 {
   <button class="cmd" data-go="top"><i data-s="star" data-z="2"></i><span data-i="cmd_t"></span></button>
  </div>
 </section>
+
+
+<section id="v-ending" class="view" hidden>
+ <div class="win ending-content">
+  <div class="ending-stars">✦ ★ ✦ ★ ✦</div>
+  <h2 class="ending-title">QUEST COMPLETE!</h2>
+  <p class="ending-message">Thank you for watching</p>
+  <p class="ending-birthday">Happy Birthday Kim Toki!</p>
+  <p class="note">WITH LOVE, FROM ALL MAGI ♡</p>
+  <br>
+  <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+ </div>
+ <audio id="birthday-audio" preload="auto"
+  src="happy-birthday-famicom.wav"></audio>
+</section>
+
 
 <section id="v-gallery" class="view" hidden>
  <div class="win">
@@ -990,8 +1044,28 @@ function stopAllSounds(){
  });
 
  activeSounds.clear();
+
+ const birthdayPlayer=$('birthday-audio');
+ if(birthdayPlayer){
+  birthdayPlayer.pause();
+  birthdayPlayer.currentTime=0;
+ }
 }
 
+
+/* ===== エンディング：ファミコン風 Happy Birthday ===== */
+function playBirthdaySong(){
+ const player=$('birthday-audio');
+ if(!player)return;
+
+ stopAllSounds();
+ player.volume=0.10;
+ player.currentTime=0;
+ player.play().catch(error=>{
+  console.warn('Birthday music autoplay was blocked.',error);
+ });
+}
+  
 function playPew(){
  sound(980,330,.13,.11,'square');
  sound(1480,820,.08,.055,'sine',.02);
@@ -1260,8 +1334,14 @@ function markWorkViewed(w){
    star.remove();
   }
  }
-}
 
+maybeShowEnding();
+}
+  
+function allWorksViewed(){
+ return WORKS.length>0&&WORKS.every(w=>isWorkViewed(w));
+}
+  
 /* ===== メッセージデータ ===== */
 const MSGS=[
 {
@@ -1300,6 +1380,38 @@ To. 아름다움의 화신 토키님 토키님을 알게 된 지는 아직 오�
 
   
 ];
+
+/* ===== 閲覧済みメッセージの管理 ===== */
+const READ_MESSAGES_KEY='mq-read-messages';
+let readMessages=new Set();
+
+try{
+ const saved=JSON.parse(localStorage.getItem(READ_MESSAGES_KEY)||'[]');
+ if(Array.isArray(saved))readMessages=new Set(saved.map(String));
+}catch(e){
+ readMessages=new Set();
+}
+
+function markMessageRead(){
+ readMessages.add(String(mi));
+ try{
+  localStorage.setItem(READ_MESSAGES_KEY,JSON.stringify([...readMessages]));
+ }catch(e){}
+ maybeShowEnding();
+}
+
+function allMessagesRead(){
+ return MSGS.length>0&&MSGS.every((m,index)=>readMessages.has(String(index)));
+}
+
+let endingUnlocked=false;
+
+function maybeShowEnding(){
+ if(endingUnlocked||!allWorksViewed()||!allMessagesRead())return;
+ endingUnlocked=true;
+ location.hash='ending';
+}
+
 
 /* ===== 言語 ===== */
 let lang='ja';
@@ -1371,14 +1483,14 @@ let mi=0;
 let tm;
 let typing=false;
 
+
 function route(){
- // 前のページの文字送りと音声を停止
  clearInterval(tm);
  typing=false;
  stopAllSounds();
 
  const h=location.hash.slice(1);
- const v=['gallery','messages','secret'].includes(h)?h:'top';
+ const v=['gallery','messages','secret','ending'].includes(h)?h:'top';
 
  closeW();
 
@@ -1386,7 +1498,7 @@ function route(){
   s.hidden=s.id!=='v-'+v;
  });
 
- $('nav').hidden=v==='top'||v==='secret';
+ $('nav').hidden=v==='top'||v==='secret'||v==='ending';
 
  window.scrollTo(0,0);
 
@@ -1397,6 +1509,10 @@ function route(){
  if(v==='messages'){
   mi=0;
   say();
+ }
+
+ if(v==='ending'){
+  playBirthdaySong();
  }
 }
 
@@ -1628,9 +1744,10 @@ function say(){
   }
 
   if(i>=tx.length){
-   clearInterval(tm);
-   typing=false;
-  }
+ clearInterval(tm);
+ typing=false;
+ markMessageRead();
+}
  },35);
 }
 
@@ -1643,12 +1760,13 @@ $('prev').onclick=()=>{
 };
 
 $('next').onclick=()=>{
- if(typing){
-  clearInterval(tm);
-  typing=false;
-  $('mtext').textContent=L(MSGS[mi].text);
-  return;
- }
+if(typing){
+ clearInterval(tm);
+ typing=false;
+ $('mtext').textContent=L(MSGS[mi].text);
+ markMessageRead();
+ return;
+}
 
  mi=(mi+1)%MSGS.length;
 
