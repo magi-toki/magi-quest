@@ -1059,7 +1059,14 @@ function playBirthdaySong(){
  if(!player)return;
 
  stopAllSounds();
- player.volume=0.03;
+
+ const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+ player.src=isMobile
+  ?'happy-birthday-famicom-iphone.wav'
+  :'happy-birthday-famicom.wav';
+
+ player.volume=0.10;
  player.currentTime=0;
  player.play().catch(error=>{
   console.warn('Birthday music autoplay was blocked.',error);
