@@ -732,7 +732,6 @@ let T=[],last=null,cat='ALL',mi=0,tm,typing=false;
 
 function route(){
  const h=location.hash.slice(1);
- const v=['gallery','messages'].includes(h)?h:'top';
   const v=['gallery','messages','secret'].includes(h)?h:'top';
  closeW();
  document.querySelectorAll('.view').forEach(s=>s.hidden=s.id!=='v-'+v);
