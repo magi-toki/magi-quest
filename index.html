@@ -271,23 +271,13 @@ h1 {
   animation:bl .6s steps(2) infinite;
 }
 
-.cmd i {
-  width:32px;
-  height:32px;
+.cmd canvas.sp {
+  width:32px !important;
+  height:32px !important;
+  object-fit:contain;
+  image-rendering:pixelated;
   flex:0 0 32px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
 }
-
-.cmd i canvas {
-  display:block;
-  max-width:32px;
-  max-height:32px;
-  width:auto !important;
-  height:auto !important;
-}
-
   
 .tabs {
   display:flex;
