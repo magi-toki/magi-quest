@@ -1059,7 +1059,7 @@ function playBirthdaySong(){
  if(!player)return;
 
  stopAllSounds();
- player.volume=0.05;
+ player.volume=0.03;
  player.currentTime=0;
  player.play().catch(error=>{
   console.warn('Birthday music autoplay was blocked.',error);
