@@ -8,89 +8,538 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:"PixelKR";src:local("x12y12pxMaruMinyaHangul"),local("NeoDunggeunmo"),local("Galmuri11"),url("fonts/x12y12pxMaruMinyaHangul.ttf") format("truetype");font-display:swap}
-:root{--bg:#1c0e3d;--p1:#4b2a9c;--p2:#2c1668;--p3:#7a55d6;--pl:#c9a8ff;--y:#ffd23f;--r:#ff4f6d;--c:#5fe3ff;--ink:#120a2a;box-sizing:border-box;color-scheme:dark}
-*,*::before,*::after{box-sizing:inherit;font-family:inherit}
-button,input,textarea,select{font:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;font-family:"DotGothic16",monospace;font-size:16px;line-height:1.7;color:#fff;background-color:var(--bg);background-image:linear-gradient(45deg,#24124d 25%,transparent 25%,transparent 75%,#24124d 75%),linear-gradient(45deg,#24124d 25%,transparent 25%,transparent 75%,#24124d 75%);background-size:16px 16px;background-position:0 0,8px 8px}
-html[lang=ko] body{font-family:"PixelKR","DotGothic16",monospace}
-[data-i]{white-space:pre-line}
-.wrap{max-width:760px;margin:0 auto;padding:16px 16px 48px}
-.sp{image-rendering:pixelated;display:inline-block;vertical-align:middle}
-.c{text-align:center}.y{color:var(--y)}
-.win{position:relative;margin:18px 0;padding:14px 16px;background:linear-gradient(var(--p1),var(--p2));box-shadow:0 -4px 0 #fff,0 4px 0 #fff,-4px 0 0 #fff,4px 0 0 #fff,inset 0 0 0 3px var(--p3),8px 10px 0 rgba(10,5,30,.55)}
-.win h2{margin:0 0 8px;font-size:18px;font-weight:400;color:var(--y)}
-.btn{font:inherit;color:#fff;background:var(--p2);border:0;padding:6px 14px;margin:4px;cursor:pointer;box-shadow:0 -4px 0 #fff,0 4px 0 #fff,-4px 0 0 #fff,4px 0 0 #fff}
-.btn:hover,.btn:focus-visible{background:var(--p3)}
-.btn:disabled{opacity:.4;cursor:default}
-.btn[aria-pressed=true]{background:var(--y);color:var(--ink)}
-button:focus-visible{outline:3px dashed var(--y);outline-offset:5px}
-#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:10px 12px;background:var(--ink)}
-#nav{display:flex;flex-wrap:wrap}
-#nav[hidden]{display:none}
-.lg{margin-left:auto}
-h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-stroke:1.15px var(--y);paint-order:stroke fill;line-height:1.1;color:var(--y);text-shadow:4px 4px 0 #a0309c,-3px -3px 0 var(--ink),3px -3px 0 var(--ink),-3px 3px 0 var(--ink),3px 3px 0 var(--ink),6px 6px 0 var(--ink)}
-.kick{color:var(--pl);letter-spacing:.2em}
-.row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-.st{flex:1;min-width:200px}
-.nm{font-size:30px;color:var(--y);line-height:1.2}
-.stat{display:flex;align-items:center;gap:10px;margin:6px 0}
-.stat b{font-weight:400;min-width:5.5em;text-align:right}
-.bar{flex:1;min-width:80px;height:12px;background:var(--ink);box-shadow:0 0 0 2px #fff}
-.bar i{display:block;height:100%;transition:width .3s steps(6)}
-.hp{background:repeating-linear-gradient(90deg,var(--r) 0 6px,transparent 6px 8px)}
-.mp{background:repeating-linear-gradient(90deg,var(--c) 0 6px,transparent 6px 8px)}
-.cmd{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;color:#fff;font:inherit;font-size:18px;padding:10px 8px 10px 36px;position:relative;cursor:pointer}
-.cmd::before{content:"";position:absolute;left:10px;top:50%;margin-top:-8px;border:8px solid transparent;border-left:12px solid var(--y);border-right:0;display:none}
-.cmd:hover,.cmd:focus-visible{background:var(--p3);outline-offset:-3px}
-.cmd:hover::before,.cmd:focus-visible::before{display:block;animation:bl .6s steps(2) infinite}
-.tabs{display:flex;flex-wrap:wrap;margin:10px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px;margin-top:14px}
-.card{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font:inherit;color:#fff;background:var(--p2);border:0;padding:14px 8px;cursor:pointer;box-shadow:0 -4px 0 #fff,0 4px 0 #fff,-4px 0 0 #fff,4px 0 0 #fff}
-.card:hover,.card:focus-visible{background:var(--p3)}
-.ct{color:var(--y)}
-.ca{color:var(--pl);font-size:14px;margin:0}
-.tag{display:inline-block;padding:0 8px;font-size:12px;background:var(--ink);color:var(--c)}
-.tag.s{background:var(--r);color:#fff}
-.note{font-size:14px;color:var(--pl)}
-.mo{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));background:rgba(10,5,30,.88);overflow:auto}
-.mo.on{display:flex}
-.mo .win{width:100%;max-width:560px;max-height:88vh;overflow:auto;margin:0}
-.x{float:right}
-.shake{animation:sh .3s steps(2) 3}
-.glow{animation:bl .5s steps(2) infinite}
-.novel{white-space:pre-wrap;max-height:40vh;overflow:auto;padding:10px;background:var(--ink)}
-.art{padding:10px;background:var(--ink)}
-.art img{max-width:100%;height:auto}
-.talk{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
-.dlg{flex:1;min-width:240px;margin:18px 0}
-.dlg p{min-height:5.1em;margin:6px 0}
-.who{color:var(--y)}
-.foot{display:flex;justify-content:space-between;align-items:center}
-@keyframes bl{50%{opacity:.35}}
-@keyframes sh{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@font-face {
+  font-family:"PixelKR";
+  src:local("x12y12pxMaruMinyaHangul"),local("NeoDunggeunmo"),local("Galmuri11"),url("fonts/x12y12pxMaruMinyaHangul.ttf") format("truetype");
+  font-display:swap;
+}
+
+:root {
+  --bg:#1c0e3d;
+  --p1:#4b2a9c;
+  --p2:#2c1668;
+  --p3:#7a55d6;
+  --pl:#c9a8ff;
+  --y:#ffd23f;
+  --r:#ff4f6d;
+  --c:#5fe3ff;
+  --ink:#120a2a;
+  box-sizing:border-box;
+  color-scheme:dark;
+}
+
+*,*::before,*::after {
+  box-sizing:inherit;
+  font-family:inherit;
+}
+
+button,input,textarea,select {
+  font:inherit;
+}
+
+html {
+  scroll-padding-top:env(safe-area-inset-top,0px);
+}
+
+body {
+  margin:0;
+  font-family:"DotGothic16",monospace;
+  font-size:16px;
+  line-height:1.7;
+  color:#fff;
+  background-color:var(--bg);
+  background-image:linear-gradient(45deg,#24124d 25%,transparent 25%,transparent 75%,#24124d 75%),linear-gradient(45deg,#24124d 25%,transparent 25%,transparent 75%,#24124d 75%);
+  background-size:16px 16px;
+  background-position:0 0,8px 8px;
+}
+
+html[lang=ko] body {
+  font-family:"PixelKR","DotGothic16",monospace;
+}
+
+[data-i] {
+  white-space:pre-line;
+}
+
+.wrap {
+  max-width:760px;
+  margin:0 auto;
+  padding:16px 16px 48px;
+}
+
+.sp {
+  image-rendering:pixelated;
+  display:inline-block;
+  vertical-align:middle;
+}
+
+.c {
+  text-align:center;
+}
+
+.y {
+  color:var(--y);
+}
+
+.win {
+  position:relative;
+  margin:18px 0;
+  padding:14px 16px;
+  background:linear-gradient(var(--p1),var(--p2));
+  box-shadow:0 -4px 0 #fff,0 4px 0 #fff,-4px 0 0 #fff,4px 0 0 #fff,inset 0 0 0 3px var(--p3),8px 10px 0 rgba(10,5,30,.55);
+}
+
+.win h2 {
+  margin:0 0 8px;
+  font-size:18px;
+  font-weight:400;
+  color:var(--y);
+}
+
+.btn {
+  font:inherit;
+  color:#fff;
+  background:var(--p2);
+  border:0;
+  padding:6px 14px;
+  margin:4px;
+  cursor:pointer;
+  box-shadow:0 -4px 0 #fff,0 4px 0 #fff,-4px 0 0 #fff,4px 0 0 #fff;
+}
+
+.btn:hover,.btn:focus-visible {
+  background:var(--p3);
+}
+
+.btn:disabled {
+  opacity:.4;
+  cursor:default;
+}
+
+.btn[aria-pressed=true] {
+  background:var(--y);
+  color:var(--ink);
+}
+
+button:focus-visible {
+  outline:3px dashed var(--y);
+  outline-offset:5px;
+}
+
+#bar {
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:5;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:4px;
+  padding:10px 12px;
+  background:var(--ink);
+}
+
+#nav {
+  display:flex;
+  flex-wrap:wrap;
+}
+
+#nav[hidden] {
+  display:none;
+}
+
+.lg {
+  margin-left:auto;
+}
+
+h1 {
+  margin:6px 0;
+  font-size:clamp(34px,11vw,72px);
+  font-weight:700;
+  -webkit-text-stroke:1.15px var(--y);
+  paint-order:stroke fill;
+  line-height:1.1;
+  color:var(--y);
+  text-shadow:4px 4px 0 #a0309c,-3px -3px 0 var(--ink),3px -3px 0 var(--ink),-3px 3px 0 var(--ink),3px 3px 0 var(--ink),6px 6px 0 var(--ink);
+}
+
+.kick {
+  color:var(--pl);
+  letter-spacing:.2em;
+}
+
+.row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:center;
+}
+
+.st {
+  flex:1;
+  min-width:200px;
+}
+
+.nm {
+  font-size:30px;
+  color:var(--y);
+  line-height:1.2;
+}
+
+.stat {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:6px 0;
+}
+
+.stat b {
+  font-weight:400;
+  min-width:5.5em;
+  text-align:right;
+}
+
+.bar {
+  flex:1;
+  min-width:80px;
+  height:12px;
+  background:var(--ink);
+  box-shadow:0 0 0 2px #fff;
+}
+
+.bar i {
+  display:block;
+  height:100%;
+  transition:width .3s steps(6);
+}
+
+.hp {
+  background:repeating-linear-gradient(90deg,var(--r) 0 6px,transparent 6px 8px);
+}
+
+.mp {
+  background:repeating-linear-gradient(90deg,var(--c) 0 6px,transparent 6px 8px);
+}
+
+.cmd {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  text-align:left;
+  background:none;
+  border:0;
+  color:#fff;
+  font:inherit;
+  font-size:18px;
+  padding:10px 8px 10px 36px;
+  position:relative;
+  cursor:pointer;
+}
+
+.cmd::before {
+  content:"";
+  position:absolute;
+  left:10px;
+  top:50%;
+  margin-top:-8px;
+  border:8px solid transparent;
+  border-left:12px solid var(--y);
+  border-right:0;
+  display:none;
+}
+
+.cmd:hover,.cmd:focus-visible {
+  background:var(--p3);
+  outline-offset:-3px;
+}
+
+.cmd:hover::before,.cmd:focus-visible::before {
+  display:block;
+  animation:bl .6s steps(2) infinite;
+}
+
+.tabs {
+  display:flex;
+  flex-wrap:wrap;
+  margin:10px 0;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:18px;
+  margin-top:14px;
+}
+
+.card {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  text-align:center;
+  font:inherit;
+  color:#fff;
+  background:var(--p2);
+  border:0;
+  padding:14px 8px;
+  cursor:pointer;
+  box-shadow:0 -4px 0 #fff,0 4px 0 #fff,-4px 0 0 #fff,4px 0 0 #fff;
+}
+
+.card:hover,.card:focus-visible {
+  background:var(--p3);
+}
+
+.ct {
+  color:var(--y);
+}
+
+.ca {
+  color:var(--pl);
+  font-size:14px;
+  margin:0;
+}
+
+/* 未閲覧作品の星マーク */
+.unread-star {
+  display:inline-block;
+  color:var(--y);
+  font-size:22px;
+  line-height:1.2;
+  text-shadow:0 0 7px rgba(255,210,63,.75);
+  margin:2px 0 4px;
+}
+
+.unread-star[hidden] {
+  display:none;
+}
+
+.tag {
+  display:inline-block;
+  padding:0 8px;
+  font-size:12px;
+  background:var(--ink);
+  color:var(--c);
+}
+
+.tag.s {
+  background:var(--r);
+  color:#fff;
+}
+
+.note {
+  font-size:14px;
+  color:var(--pl);
+}
+
+.mo {
+  position:fixed;
+  inset:0;
+  z-index:20;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));
+  background:rgba(10,5,30,.88);
+  overflow:auto;
+}
+
+.mo.on {
+  display:flex;
+}
+
+.mo .win {
+  width:100%;
+  max-width:560px;
+  max-height:88vh;
+  overflow:auto;
+  margin:0;
+}
+
+.x {
+  float:right;
+}
+
+.shake {
+  animation:sh .3s steps(2) 3;
+}
+
+.glow {
+  animation:bl .5s steps(2) infinite;
+}
+
+.novel {
+  white-space:pre-wrap;
+  max-height:40vh;
+  overflow:auto;
+  padding:10px;
+  background:var(--ink);
+}
+
+.art {
+  padding:10px;
+  background:var(--ink);
+}
+
+.art img {
+  max-width:100%;
+  height:auto;
+}
+
+.talk {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:flex-end;
+}
+
+.dlg {
+  flex:1;
+  min-width:240px;
+  margin:18px 0;
+}
+
+.dlg p {
+  min-height:5.1em;
+  margin:6px 0;
+}
+
+.who {
+  color:var(--y);
+}
+
+.foot {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+@keyframes bl {
+  50% {
+    opacity:.35;
+  }
+}
+
+@keyframes sh {
+  0%,100% {
+    transform:translateX(0);
+  }
+  25% {
+    transform:translateX(-8px);
+  }
+  75% {
+    transform:translateX(8px);
+  }
+}
 
 /* HAPPY BIRTHDAY：文字ごとにランダム点滅 */
-.blink-char{display:inline-block;animation:birthdayBlink var(--duration) steps(1,end) var(--delay) infinite;text-shadow:2px 0 #4b2a9c,-2px 0 #4b2a9c,0 2px #4b2a9c,0 -2px #4b2a9c,4px 4px 0 #120a2a;will-change:opacity,filter}
-@keyframes birthdayBlink{0%,27%,52%,100%{opacity:1;filter:brightness(1)}28%,36%{opacity:.08;filter:brightness(.65)}37%,43%{opacity:1;filter:brightness(2.4) drop-shadow(0 0 7px #fff4a8)}44%,51%{opacity:.12;filter:brightness(.7)}}
+.blink-char {
+  display:inline-block;
+  animation:birthdayBlink var(--duration) steps(1,end) var(--delay) infinite;
+  text-shadow:2px 0 #4b2a9c,-2px 0 #4b2a9c,0 2px #4b2a9c,0 -2px #4b2a9c,4px 4px 0 #120a2a;
+  will-change:opacity,filter;
+}
+
+@keyframes birthdayBlink {
+  0%,27%,52%,100% {
+    opacity:1;
+    filter:brightness(1);
+  }
+  28%,36% {
+    opacity:.08;
+    filter:brightness(.65);
+  }
+  37%,43% {
+    opacity:1;
+    filter:brightness(2.4) drop-shadow(0 0 7px #fff4a8);
+  }
+  44%,51% {
+    opacity:.12;
+    filter:brightness(.7);
+  }
+}
 
 /* MAGI PARTY：押せるアイコン */
-.party-row{display:flex;align-items:center;flex-wrap:wrap;gap:3px}
-.party-icon{display:inline-grid;place-items:center;min-width:42px;min-height:42px;padding:2px;border:2px solid transparent;background:transparent;cursor:pointer;vertical-align:middle}
-.party-icon:hover{border-color:transparent;filter:brightness(1.3)}
-.party-icon:focus,.party-icon:focus-visible{outline:none;border-color:transparent;box-shadow:none}
-.party-icon:active{transform:scale(.85)}
-.party-icon.party-pop{animation:partyPop .3s steps(3)}
-@keyframes partyPop{40%{transform:scale(1.3) rotate(-8deg)}75%{transform:scale(.9) rotate(5deg)}}
-.party-burst{position:fixed;z-index:100;pointer-events:none;animation:burst .75s ease-out forwards;font-size:20px;line-height:1;text-shadow:1px 1px #4b2a9c}
-@keyframes burst{0%{opacity:0;transform:translate(0,0) scale(.4)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.2)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}}
+.party-row {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:3px;
+}
+
+.party-icon {
+  display:inline-grid;
+  place-items:center;
+  min-width:42px;
+  min-height:42px;
+  padding:2px;
+  border:2px solid transparent;
+  background:transparent;
+  cursor:pointer;
+  vertical-align:middle;
+}
+
+.party-icon:hover {
+  border-color:transparent;
+  filter:brightness(1.3);
+}
+
+.party-icon:focus,.party-icon:focus-visible {
+  outline:none;
+  border-color:transparent;
+  box-shadow:none;
+}
+
+.party-icon:active {
+  transform:scale(.85);
+}
+
+.party-icon.party-pop {
+  animation:partyPop .3s steps(3);
+}
+
+@keyframes partyPop {
+  40% {
+    transform:scale(1.3) rotate(-8deg);
+  }
+  75% {
+    transform:scale(.9) rotate(5deg);
+  }
+}
+
+.party-burst {
+  position:fixed;
+  z-index:100;
+  pointer-events:none;
+  animation:burst .75s ease-out forwards;
+  font-size:20px;
+  line-height:1;
+  text-shadow:1px 1px #4b2a9c;
+}
+
+@keyframes burst {
+  0% {
+    opacity:0;
+    transform:translate(0,0) scale(.4);
+  }
+  15% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+    transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.2);
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation:none!important;
+    scroll-behavior:auto!important;
+  }
+}
 
 /* ===== SECRET PAGE ===== */
-
-/* 見えない隠しボタン */
-.secret-trigger{
+.secret-trigger {
   display:inline-block;
   width:22px;
   height:38px;
@@ -102,41 +551,40 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
   vertical-align:middle;
 }
 
-.secret-trigger:focus-visible{
+.secret-trigger:focus-visible {
   outline:2px dashed var(--y);
   outline-offset:2px;
 }
 
-/* 隠しページ */
-.secret-content{
+.secret-content {
   text-align:center;
   padding:30px 12px;
 }
 
-.secret-content h2{
+.secret-content h2 {
   color:var(--y);
   letter-spacing:.12em;
 }
 
-.secret-content p{
+.secret-content p {
   line-height:2;
   margin:22px 0;
 }
 
-.secret-text{
+.secret-text {
   white-space:pre-line;
 }
 
-.secret-credit{
+/* フッター */
+.site-footer {
+  text-align:center;
+  padding:20px 10px;
   color:var(--pl);
-  font-size:14px;
-  margin-top:35px;
+  font-size:12px;
+  letter-spacing:.08em;
 }
-
-
- 
-
 </style>
+
 </head>
 <body>
 <header id="bar">
@@ -163,19 +611,19 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
   <div class="row">
    <div><i data-s="crow" data-z="4"></i></div>
    <div class="st">
-    <div class="nm">Kim Toki</div>
+    <div class="nm">TOKI</div>
     <div class="y">THE GORGEOUS BIRTHDAY BOY</div>
     <div>LV. forever29</div>
     <div class="stat">HP<span class="bar"><i class="hp" id="hp"></i></span><b id="hpv"></b></div>
     <div class="stat">MP<span class="bar"><i class="mp" id="mp"></i></span><b id="mpv"></b></div>
     <div>MAIN QUEST<br><b class="y">HAPPY BIRTHDAY!</b></div>
     <div class="party-row">ITEM
- <button class="party-icon" type="button" aria-label="パフェ"><i data-s="parfait" data-z="3"></i></button>
- <button class="party-icon" type="button" aria-label="宝石"><i data-s="gem" data-z="3"></i></button>
- <button class="party-icon" type="button" aria-label="いちご"><i data-s="berry" data-z="3"></i></button>
- <button class="party-icon" type="button" aria-label="プレゼント"><i data-s="present" data-z="3"></i></button>
- <button class="secret-trigger" type="button" data-go="secret" aria-label="SECRET"></button>
-</div>
+     <button class="party-icon" type="button" aria-label="パフェ"><i data-s="parfait" data-z="3"></i></button>
+     <button class="party-icon" type="button" aria-label="宝石"><i data-s="gem" data-z="3"></i></button>
+     <button class="party-icon" type="button" aria-label="いちご"><i data-s="berry" data-z="3"></i></button>
+     <button class="party-icon" type="button" aria-label="プレゼント"><i data-s="present" data-z="3"></i></button>
+     <button class="secret-trigger" type="button" data-go="secret" aria-label="SECRET"></button>
+    </div>
    </div>
   </div>
  </div>
@@ -224,19 +672,14 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
 <section id="v-secret" class="view" hidden>
  <div class="win secret-content">
   <h2>SECRET PAGE</h2>
-
   <p data-i="secret_title"></p>
-
   <p class="secret-text" data-i="secret_text"></p>
-
   <div class="secret-credit" data-i="secret_credit"></div>
-
   <button class="btn" type="button" data-go="top" data-i="secret_back"></button>
  </div>
 </section>
-
 </main>
-  
+
 <footer class="site-footer">
  기획·제작　다윤 & nico
 </footer>
@@ -249,7 +692,22 @@ h1{margin:6px 0;font-size:clamp(34px,11vw,72px);font-weight:700;-webkit-text-str
 </div>
 
 <script>
-const PAL={K:'#1a0f2e',N:'#4a3a8e',P:'#8a6fe0',L:'#c9a8ff',W:'#ffffff',V:'#444468',U:'#6a6a92',Y:'#ffd23f',R:'#ff4f6d',G:'#3fbf6a',B:'#c07a35',D:'#6b3a14',C:'#5fe3ff',S:'#9a8fb0'};
+const PAL={
+ K:'#1a0f2e',
+ N:'#4a3a8e',
+ P:'#8a6fe0',
+ L:'#c9a8ff',
+ W:'#ffffff',
+ V:'#444468',
+ U:'#6a6a92',
+ Y:'#ffd23f',
+ R:'#ff4f6d',
+ G:'#3fbf6a',
+ B:'#c07a35',
+ D:'#6b3a14',
+ C:'#5fe3ff',
+ S:'#9a8fb0'
+};
 
 const SP={
 crow:`..........................................
@@ -401,22 +859,34 @@ KYYYYYYYYYK
 
 function px(n,z){
  const r=SP[n].trim().split('\n'),c=document.createElement('canvas');
- c.width=r[0].length;c.height=r.length;c.className='sp';
+ c.width=r[0].length;
+ c.height=r.length;
+ c.className='sp';
+
  const g=c.getContext('2d');
+
  r.forEach((l,y)=>[...l].forEach((ch,x)=>{
-  if(PAL[ch]){g.fillStyle=PAL[ch];g.fillRect(x,y,1,1)}
+  if(PAL[ch]){
+   g.fillStyle=PAL[ch];
+   g.fillRect(x,y,1,1);
+  }
  }));
+
  c.style.width=c.width*z+'px';
  c.style.height=c.height*z+'px';
  c.setAttribute('aria-hidden','true');
+
  return c;
 }
 
 function hy(root){
- root.querySelectorAll('[data-s]').forEach(e=>e.replaceWith(px(e.dataset.s,+e.dataset.z||4)));
+ root.querySelectorAll('[data-s]').forEach(e=>{
+  e.replaceWith(px(e.dataset.s,+e.dataset.z||4));
+ });
 }
 
 const $=id=>document.getElementById(id);
+
 const el=(t,c,x)=>{
  const e=document.createElement(t);
  if(c)e.className=c;
@@ -430,18 +900,22 @@ let masterGain=null;
 
 function getAudio(){
  const AC=window.AudioContext||window.webkitAudioContext;
+
  if(!AC)return null;
+
  if(!audioCtx){
   audioCtx=new AC();
   masterGain=audioCtx.createGain();
   masterGain.gain.value=0.9;
   masterGain.connect(audioCtx.destination);
  }
+
  return audioCtx;
 }
 
 function sound(freq,end,duration,volume=.025,type='square',delay=0){
  const ctx=getAudio();
+
  if(!ctx||!masterGain)return;
 
  const play=()=>{
@@ -464,7 +938,6 @@ function sound(freq,end,duration,volume=.025,type='square',delay=0){
   osc.stop(start+duration+.025);
  };
 
- // iOS SafariではAudioContextの再開完了後に音を予約する
  if(ctx.state==='running'){
   play();
  }else{
@@ -481,6 +954,32 @@ function playPew(){
  sound(1480,820,.08,.055,'sine',.02);
 }
 
+/* ===== レトロRPG風・宝箱の効果音 ===== */
+function playChestSelect(){
+ sound(660,880,.07,.045,'square');
+ sound(990,1180,.06,.028,'square',.055);
+}
+
+function playChestOpen(){
+ sound(220,150,.24,.065,'square');
+ sound(330,220,.18,.045,'triangle',.08);
+ sound(440,330,.12,.035,'square',.19);
+}
+
+/* レアアイテム発見：短めのファンファーレ */
+function playRareTreasure(){
+ sound(392,392,.11,.050,'square');
+ sound(494,494,.11,.052,'square',.07);
+ sound(587,587,.12,.055,'square',.14);
+ sound(784,784,.14,.060,'square',.21);
+ sound(988,988,.18,.050,'triangle',.28);
+ sound(1175,1175,.22,.042,'sine',.35);
+ sound(1568,1568,.24,.035,'sine',.44);
+ sound(523,523,.22,.030,'triangle',.44);
+ sound(659,659,.22,.028,'triangle',.44);
+ sound(784,784,.22,.026,'triangle',.44);
+}
+
 function playRpgVoice(){
  sound(880,1120,.09,.085,'triangle');
  sound(1180,760,.10,.075,'triangle',.08);
@@ -491,10 +990,12 @@ function playTextTick(){
  sound(1120,920,.03,.032,'square');
 }
 
-// 最初のタップで音声を有効化する（iOS向け）
 function unlockAudio(){
  const ctx=getAudio();
- if(ctx&&ctx.state!=='running')ctx.resume().catch(()=>{});
+
+ if(ctx&&ctx.state!=='running'){
+  ctx.resume().catch(()=>{});
+ }
 }
 
 ['pointerdown','touchstart','click'].forEach(eventName=>{
@@ -503,18 +1004,33 @@ function unlockAudio(){
 
 /* ===== 飛び出すハート・花火 ===== */
 function burstFrom(button){
- const rect=button.getBoundingClientRect(),x=rect.left+rect.width/2,y=rect.top+rect.height/2;
- const symbols=['♥','♡','✦','★','✧','✹'],colors=['#ff91c8','#ffe17a','#bda7ff','#9ee8d1'];
+ const rect=button.getBoundingClientRect();
+ const x=rect.left+rect.width/2;
+ const y=rect.top+rect.height/2;
+
+ const symbols=['♥','♡','✦','★','✧','✹'];
+ const colors=['#ff91c8','#ffe17a','#bda7ff','#9ee8d1'];
+
  for(let i=0;i<12;i++){
-  const p=document.createElement('span');p.className='party-burst';p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-  p.style.left=x+'px';p.style.top=y+'px';p.style.color=colors[i%colors.length];
-  const angle=Math.PI*2*i/12,distance=40+Math.random()*55;
+  const p=document.createElement('span');
+
+  p.className='party-burst';
+  p.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+  p.style.left=x+'px';
+  p.style.top=y+'px';
+  p.style.color=colors[i%colors.length];
+
+  const angle=Math.PI*2*i/12;
+  const distance=40+Math.random()*55;
+
   p.style.setProperty('--dx',Math.cos(angle)*distance+'px');
   p.style.setProperty('--dy',(Math.sin(angle)*distance-20)+'px');
   p.style.setProperty('--rot',(Math.random()*100-50)+'deg');
+
   document.body.appendChild(p);
   p.addEventListener('animationend',()=>p.remove(),{once:true});
  }
+
  button.classList.remove('party-pop');
  void button.offsetWidth;
  button.classList.add('party-pop');
@@ -530,22 +1046,29 @@ document.querySelectorAll('.party-icon').forEach(button=>{
 /* ===== タイトルのランダム点滅 ===== */
 function birthdayBlink(){
  const heading=document.querySelector('#v-top h1');
+
  if(!heading||heading.dataset.blinkReady)return;
 
  heading.dataset.blinkReady='true';
+
  const lines=heading.innerHTML.split('<br>');
  heading.innerHTML='';
 
  lines.forEach((line,index)=>{
   [...line].forEach(char=>{
    const span=document.createElement('span');
+
    span.className='blink-char';
    span.textContent=char;
    span.style.setProperty('--delay',Math.random()*2.5+'s');
    span.style.setProperty('--duration',(1.8+Math.random()*2.2)+'s');
+
    heading.appendChild(span);
   });
-  if(index<lines.length-1)heading.appendChild(document.createElement('br'));
+
+  if(index<lines.length-1){
+   heading.appendChild(document.createElement('br'));
+  }
  });
 }
 
@@ -562,6 +1085,8 @@ ja:{
  cmd_t:'トップにもどる',
  gal_h:'GALLERY / さくひんギャラリー',
  gal_n:'マギから届いた作品をえらんで、たからばこを開こう。',
+ empty:'表示できる作品がありません。',
+ snote:'これはサンプル作品です。',
  msg_h:'MESSAGE / おいわいメッセージ',
  close:'とじる ×',
  wd:'作品の詳細',
@@ -576,9 +1101,10 @@ ja:{
  again:'はじめにもどる',
  t_ILLUSTRATION:'イラスト',
  t_NOVEL:'小説',
-secret_title:'들켰다!',
-secret_text:'안녕하세요. 잘 지내고 계신가요?\n매일 즐겁게 보내고 계신가요?\n\n이번 기획은 다윤님께서 시작해 주셨고, nico와 함께 만들었습니다.\n\n아직 서툰 부분도 있겠지만, 마기 여러분과 토키님 모두에게 기쁜 선물이 되었으면 좋겠습니다.\n\n언제나 토키님을 소중히 여기고 사랑하는 마기들이 곁에 있습니다.\n토키님의 하루하루가 사랑으로 가득하고, 언제나 웃음이 넘치기를 바랍니다!\n\n토키님, 사랑합니다.\n영원한 스물아홉 살을 위하여, 건배!',
-secret_back:'처음으로 돌아가기'
+ secret_title:'들켰다!',
+ secret_text:'안녕하세요. 잘 지내고 계신가요?\n매일 즐겁게 보내고 계신가요?\n\n이번 기획은 다윤님께서 시작해 주셨고, nico와 함께 만들었습니다.\n\n아직 서툰 부분도 있겠지만, 마기 여러분과 토키님 모두에게 기쁜 선물이 되었으면 좋겠습니다.\n\n언제나 토키님을 소중히 여기고 사랑하는 마기들이 곁에 있습니다.\n토키님의 하루하루가 사랑으로 가득하고, 언제나 웃음이 넘치기를 바랍니다!\n\n토키님, 사랑합니다.\n영원한 스물아홉 살을 위하여, 건배!',
+ secret_credit:'기획·제작　다윤 & nico',
+ secret_back:'처음으로 돌아가기'
 },
 ko:{
  nav_top:'처음으로',
@@ -591,6 +1117,8 @@ ko:{
  cmd_t:'처음으로',
  gal_h:'GALLERY / 작품 갤러리',
  gal_n:'마기가 보내준 작품을 골라 보물상자를 열어 봐요.',
+ empty:'표시할 작품이 없습니다.',
+ snote:'샘플 작품입니다.',
  msg_h:'MESSAGE / 축하 메시지',
  close:'닫기 ×',
  wd:'작품 상세',
@@ -605,98 +1133,119 @@ ko:{
  again:'처음으로',
  t_ILLUSTRATION:'일러스트',
  t_NOVEL:'小説',
-secret_title:'들켰다!',
-secret_text:'안녕하세요. 잘 지내고 계신가요?\n매일 즐겁게 보내고 계신가요?\n\n이번 기획은 다윤님께서 시작해 주셨고, nico와 함께 만들었습니다.\n\n아직 서툰 부분도 있겠지만, 마기 여러분과 토키님 모두에게 기쁜 선물이 되었으면 좋겠습니다.\n\n언제나 토키님을 소중히 여기고 사랑하는 마기들이 곁에 있습니다.\n토키님의 하루하루가 사랑으로 가득하고, 언제나 웃음이 넘치기를 바랍니다!\n\n토키님, 사랑합니다.\n영원한 스물아홉 살을 위하여, 건배!',
-secret_back:'처음으로 돌아가기'
+ secret_title:'들켰다!',
+ secret_text:'안녕하세요. 잘 지내고 계신가요?\n매일 즐겁게 보내고 계신가요?\n\n이번 기획은 다윤님께서 시작해 주셨고, nico와 함께 만들었습니다.\n\n아직 서툰 부분도 있겠지만, 마기 여러분과 토키님 모두에게 기쁜 선물이 되었으면 좋겠습니다.\n\n언제나 토키님을 소중히 여기고 사랑하는 마기들이 곁에 있습니다.\n토키님의 하루하루가 사랑으로 가득하고, 언제나 웃음이 넘치기를 바랍니다!\n\n토키님, 사랑합니다.\n영원한 스물아홉 살을 위하여, 건배!',
+ secret_credit:'기획·제작　다윤 & nico',
+ secret_back:'처음으로 돌아가기'
 }
-};
+};  
 
+/* ===== 作品データ ===== */
 const WORKS=[
 {
-  type:'ILLUSTRATION',
-  author:{
-    ja:'Nanka',
-    ko:'Nanka'
-  },
-  img:'images/nannka.jpg'
+ id:'work-nannka',
+ type:'ILLUSTRATION',
+ author:{ja:'Nanka',ko:'Nanka'},
+ img:'images/nannka.jpg'
 },
- {
-  type:'ILLUSTRATION',
-  author:{
-    ja:'？',
-    ko:'？'
-  },
-  img:'images/honya.jpg'
-},
-
- 
 {
-  type:'NOVEL',
-  author:{
-    ja:'マギA',
-    ko:'마기 A'
-  },
-  text:{
-    ja:`ここに小説の本文を入力します。`,
-    ko:`여기에 소설 본문을 입력합니다.`
-  }
+ id:'work-honya',
+ type:'ILLUSTRATION',
+ author:{ja:'？',ko:'？'},
+ img:'images/honya.jpg'
+},
+{
+ id:'work-novel-sample',
+ type:'NOVEL',
+ author:{ja:'マギA',ko:'마기 A'},
+ text:{
+  ja:`ここに小説の本文を入力します。`,
+  ko:`여기에 소설 본문을 입력합니다.`
+ }
 },
 ];
-const SF={
- ja:'SAMPLE（仮データ）',
- ko:'SAMPLE (임시 데이터)'
-};
 
+/* ===== 閲覧済み作品の管理 ===== */
+const VIEWED_KEY='mq-viewed-works';
+let viewedWorks=new Set();
 
-const MSGS=[
- {
-  from:{
-   ja:'불꽃타입',
-   ko:'불꽃타입'
-  },
-  text:{
-   ja:`저는 토키님의 까짓 거 함 해보는 모습을 좋아해요!
-To. 아름다움의 화신 토키님 토키님을 알게 된 지는 아직 오래되지 않았지만 늘 새로운 것에 도전하시는 모습이 정말 존경스럽다고 느꼈어요. 저도 토키님에게 좋은 영향을 받아 그동안 해보고 싶었던 일에 직접 도전해보는 계기가 되었습니다. 그리고 토키님 덕분에 평범하고 따분했던 하루를 즐겁고 행복하게 마무리할 수 있어서 토키님을 알게 된 것이 정말 행운이라고 생각해요. 입덕 후 처음으로 생일을 축하할 수 있어서 정말 기쁘고 앞으로도 계속 응원하겠습니다! 생일 진심으로 축하드려요!`,
-   ko:`저는 토키님의 까짓 거 함 해보는 모습을 좋아해요!
-To. 아름다움의 화신 토키님 토키님을 알게 된 지는 아직 오래되지 않았지만 늘 새로운 것에 도전하시는 모습이 정말 존경스럽다고 느꼈어요. 저도 토키님에게 좋은 영향을 받아 그동안 해보고 싶었던 일에 직접 도전해보는 계기가 되었습니다. 그리고 토키님 덕분에 평범하고 따분했던 하루를 즐겁고 행복하게 마무리할 수 있어서 토키님을 알게 된 것이 정말 행운이라고 생각해요. 입덕 후 처음으로 생일을 축하할 수 있어서 정말 기쁘고 앞으로도 계속 응원하겠습니다! 생일 진심으로 축하드려요!`
-  }
- },
- {
-  from:{
-   ja:'マギC',
-   ko:'마기 C'
-  },
-  text:{
-   ja:'メッセージ本文',
-   ko:'메시지 내용'
-  }
- },
- {
-  from:{
-   ja:'マギD',
-   ko:'마기 D'
-  },
-  text:{
-   ja:'メッセージ本文',
-   ko:'메시지 내용'
+try{
+ const saved=JSON.parse(localStorage.getItem(VIEWED_KEY)||'[]');
+
+ if(Array.isArray(saved)){
+  viewedWorks=new Set(saved);
+ }
+}catch(e){
+ viewedWorks=new Set();
+}
+
+function isWorkViewed(w){
+ return viewedWorks.has(w.id);
+}
+
+function markWorkViewed(w){
+ if(!w.id)return;
+
+ viewedWorks.add(w.id);
+
+ try{
+  localStorage.setItem(VIEWED_KEY,JSON.stringify([...viewedWorks]));
+ }catch(e){}
+
+ if(last){
+  const star=last.querySelector('.unread-star');
+
+  if(star){
+   star.remove();
   }
  }
-];
+}
 
+/* ===== メッセージデータ ===== */
+const MSGS=[
+{
+ from:{ja:'불꽃타입',ko:'불꽃타입'},
+ text:{
+  ja:`저는 토키님의 까짓 거 함 해보는 모습을 좋아해요!
+To. 아름다움의 화신 토키님 토키님을 알게 된 지는 아직 오래되지 않았지만 늘 새로운 것에 도전하시는 모습이 정말 존경스럽다고 느꼈어요. 저도 토키님에게 좋은 영향을 받아 그동안 해보고 싶었던 일에 직접 도전해보는 계기가 되었습니다. 그리고 토키님 덕분에 평범하고 따분했던 하루를 즐겁고 행복하게 마무리할 수 있어서 토키님을 알게 된 것이 정말 행운이라고 생각해요. 입덕 후 처음으로 생일을 축하할 수 있어서 정말 기쁘고 앞으로도 계속 응원하겠습니다! 생일 진심으로 축하드려요!`,
+  ko:`저는 토키님의 까짓 거 함 해보는 모습을 좋아해요!
+To. 아름다움의 화신 토키님 토키님을 알게 된 지는 아직 오래되지 않았지만 늘 새로운 것에 도전하시는 모습이 정말 존경스럽다고 느꼈어요. 저도 토키님에게 좋은 영향을 받아 그동안 해보고 싶었던 일에 직접 도전해보는 계기가 되었습니다. 그리고 토키님 덕분에 평범하고 따분했던 하루를 즐겁고 행복하게 마무리할 수 있어서 토키님을 알게 된 것이 정말 행운이라고 생각해요. 입덕 후 처음으로 생일을 축하할 수 있어서 정말 기쁘고 앞으로도 계속 응원하겠습니다! 생일 진심으로 축하드려요!`
+ }
+},
+{
+ from:{ja:'マギC',ko:'마기 C'},
+ text:{ja:'メッセージ本文',ko:'메시지 내용'}
+},
+{
+ from:{ja:'マギD',ko:'마기 D'},
+ text:{ja:'メッセージ本文',ko:'메시지 내용'}
+}
+];
 
 /* ===== 言語 ===== */
 let lang='ja';
+
 try{
  const s=localStorage.getItem('mq-lang');
- if(s==='ko'||s==='ja')lang=s;
+
+ if(s==='ko'||s==='ja'){
+  lang=s;
+ }
 }catch(e){}
 
 const t=k=>I[lang][k];
-const L=v=>v&&typeof v==='object'?(v[lang]||v.ja||''):(v||'');
+
+const L=v=>v&&typeof v==='object'
+ ?(v[lang]||v.ja||'')
+ :(v||'');
 
 function applyLang(){
  document.documentElement.lang=lang;
- document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+
+ document.querySelectorAll('[data-i]').forEach(e=>{
+  e.textContent=t(e.dataset.i);
+ });
+
  $('mo').setAttribute('aria-label',t('wd'));
  $('lj').setAttribute('aria-pressed',lang==='ja');
  $('lk').setAttribute('aria-pressed',lang==='ko');
@@ -704,11 +1253,18 @@ function applyLang(){
 
 function setLang(l){
  lang=l;
- try{localStorage.setItem('mq-lang',l)}catch(e){}
+
+ try{
+  localStorage.setItem('mq-lang',l);
+ }catch(e){}
+
  closeW();
  applyLang();
  grid();
- if(!$('v-messages').hidden)say();
+
+ if(!$('v-messages').hidden){
+  say();
+ }
 }
 
 $('lj').onclick=()=>setLang('ja');
@@ -720,6 +1276,7 @@ const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 function roll(){
  ['hp','mp'].forEach(k=>{
   const v=rnd(3000,9999);
+
   $(k).style.width=(v/99.99)+'%';
   $(k+'v').textContent=v+'/9999';
  });
@@ -728,16 +1285,31 @@ function roll(){
 $('stw').onclick=roll;
 
 /* ===== 画面切り替え ===== */
-let T=[],last=null,cat='ALL',mi=0,tm,typing=false;
+let T=[];
+let last=null;
+let cat='ALL';
+let mi=0;
+let tm;
+let typing=false;
 
 function route(){
  const h=location.hash.slice(1);
-  const v=['gallery','messages','secret'].includes(h)?h:'top';
+ const v=['gallery','messages','secret'].includes(h)?h:'top';
+
  closeW();
- document.querySelectorAll('.view').forEach(s=>s.hidden=s.id!=='v-'+v);
+
+ document.querySelectorAll('.view').forEach(s=>{
+  s.hidden=s.id!=='v-'+v;
+ });
+
  $('nav').hidden=v==='top'||v==='secret';
+
  window.scrollTo(0,0);
- if(v==='top')roll();
+
+ if(v==='top'){
+  roll();
+ }
+
  if(v==='messages'){
   mi=0;
   say();
@@ -746,7 +1318,10 @@ function route(){
 
 document.addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');
- if(g)location.hash=g.dataset.go;
+
+ if(g){
+  location.hash=g.dataset.go;
+ }
 });
 
 window.addEventListener('hashchange',route);
@@ -754,127 +1329,220 @@ window.addEventListener('hashchange',route);
 /* ===== ギャラリー ===== */
 function grid(){
  const g=$('grid');
+
  g.replaceChildren();
+
  const A=WORKS.filter(w=>cat==='ALL'||w.type===cat);
- if(!A.length)g.append(el('p',null,t('empty')));
+
+ if(!A.length){
+  g.append(el('p',null,t('empty')));
+ }
 
  A.forEach(w=>{
   const b=el('button','card');
+
   b.type='button';
+
   const i=el('i');
   i.dataset.s=w.type==='NOVEL'?'book':'gem';
   i.dataset.z=5;
+
   b.append(i);
-  if(w.sample)b.append(el('span','tag s','SAMPLE'));
+
+  if(!isWorkViewed(w)){
+   const star=el('span','unread-star','★');
+
+   star.setAttribute('aria-label','未閲覧');
+   star.title='未閲覧';
+
+   b.append(star);
+  }
+
+  if(w.sample){
+   b.append(el('span','tag s','SAMPLE'));
+  }
+
   b.append(el('span','ca',L(w.author)));
+
   b.onclick=()=>openW(w,b);
+
   g.append(b);
  });
+
  hy(g);
 }
 
 document.querySelectorAll('.tab').forEach(b=>{
  b.onclick=()=>{
   cat=b.dataset.c;
-  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-pressed',x===b));
+
+  document.querySelectorAll('.tab').forEach(x=>{
+   x.setAttribute('aria-pressed',x===b);
+  });
+
   grid();
  };
 });
 
 function openW(w,opener){
+ playChestSelect();
+
  last=opener;
+
  $('mo').classList.add('on');
  document.body.style.overflow='hidden';
+
  const b=$('mb');
+
  b.replaceChildren();
+
  const ch=px('chestC',10);
  ch.classList.add('shake');
+
  const wr=el('div','c');
+
  wr.append(ch);
+
  const m=el('p','c',t('opening'));
+
  b.append(wr,m);
 
  T=[
   setTimeout(()=>{
+   playChestOpen();
+
    const o=px('chestO',10);
+
    o.classList.add('glow');
+
    ch.replaceWith(o);
    m.textContent=t('found');
   },900),
-  setTimeout(()=>detail(w),1800)
+
+  setTimeout(()=>{
+   playRareTreasure();
+   detail(w);
+  },1800)
  ];
 
  $('mx').focus();
 }
 
 function detail(w){
- const b=$('mb');
- b.replaceChildren();
- const g=el('div');
- g.append(el('span','tag',w.type));
- if(w.sample)g.append(' ',el('span','tag s','SAMPLE'));
+ // 詳細画面が表示された時点で閲覧済みにする
+ markWorkViewed(w);
 
-b.append(
+ const b=$('mb');
+
+ b.replaceChildren();
+
+ const g=el('div');
+
+ g.append(el('span','tag',w.type));
+
+ if(w.sample){
+  g.append(' ',el('span','tag s','SAMPLE'));
+ }
+
+ b.append(
   g,
   el('p','ca',t('by')+L(w.author))
-);
- 
+ );
+
  if(w.type==='NOVEL'){
   b.append(el('div','novel',L(w.text)));
  }else{
   const m=el('div','art c');
+
   if(w.img){
    const im=new Image();
+
    im.src=w.img;
    im.alt=L(w.title);
+
    m.append(im);
   }else{
    const i=el('i');
+
    i.dataset.s='gem';
    i.dataset.z=10;
+
    m.append(i,el('p',null,t('noimg')));
   }
+
   b.append(m);
  }
 
- if(w.comment)b.append(el('h2',null,t('cmt')),el('p',null,L(w.comment)));
- if(w.sample)b.append(el('p','note',t('snote')));
+ if(w.comment){
+  b.append(
+   el('h2',null,t('cmt')),
+   el('p',null,L(w.comment))
+  );
+ }
+
+ if(w.sample){
+  b.append(el('p','note',t('snote')));
+ }
+
  hy(b);
 }
 
 function closeW(){
  T.forEach(clearTimeout);
+
  T=[];
- if(!$('mo').classList.contains('on'))return;
+
+ if(!$('mo').classList.contains('on')){
+  return;
+ }
+
  $('mo').classList.remove('on');
  document.body.style.overflow='';
- if(last&&document.contains(last))last.focus();
+
+ if(last&&document.contains(last)){
+  last.focus();
+ }
 }
 
 $('mx').onclick=closeW;
+
 $('mo').addEventListener('click',e=>{
- if(e.target===$('mo'))closeW();
+ if(e.target===$('mo')){
+  closeW();
+ }
 });
+
 document.addEventListener('keydown',e=>{
- if(e.key==='Escape')closeW();
+ if(e.key==='Escape'){
+  closeW();
+ }
 });
 
 /* ===== メッセージ：文字送り＋RPG風ボイス ===== */
 function say(){
- const m=MSGS[mi],tx=L(m.text);
+ const m=MSGS[mi];
+ const tx=L(m.text);
+
  $('mfrom').textContent=L(m.from);
  $('mcnt').textContent=(mi+1)+' / '+MSGS.length;
  $('next').textContent=t(mi===MSGS.length-1?'again':'next');
  $('prev').disabled=mi===0;
 
  clearInterval(tm);
+
  let i=0;
+
  typing=true;
+
  $('mtext').textContent='';
 
  tm=setInterval(()=>{
   $('mtext').textContent=tx.slice(0,++i);
-  if(i===1||i%2===0)playTextTick();
+
+  if(i===1||i%2===0){
+   playTextTick();
+  }
+
   if(i>=tx.length){
    clearInterval(tm);
    typing=false;
@@ -897,7 +1565,9 @@ $('next').onclick=()=>{
   $('mtext').textContent=L(MSGS[mi].text);
   return;
  }
+
  mi=(mi+1)%MSGS.length;
+
  playRpgVoice();
  say();
 };
@@ -908,6 +1578,7 @@ birthdayBlink();
 applyLang();
 grid();
 route();
+
 </script>
 </body>
 </html>
