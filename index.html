@@ -15,6 +15,14 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "PixelEN";
+  src: url("fonts/Galmuri11.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF;
+}
 
 :root {
   --bg:#1c0e3d;
@@ -58,6 +66,9 @@ body {
 html[lang=ko] body {
   font-family:"PixelKR","DotGothic16",monospace;
 }
+html[lang=ja] body {
+  font-family:"PixelEN","DotGothic16",monospace;
+} 
 html[lang=ja] body {
   font-size:17px;
 }
