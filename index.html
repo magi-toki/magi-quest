@@ -2210,7 +2210,14 @@ if (type < 0.20) {
     function checkCollision() {
     if (!running) return;
 
-    const playerRect = player.getBoundingClientRect();
+    const rect = player.getBoundingClientRect();
+
+const playerRect = {
+  left: rect.left + 12,
+  right: rect.right - 12,
+  top: rect.top + 12,
+  bottom: rect.bottom - 12
+};
 
     stage.querySelectorAll('.game-fall').forEach(item => {
       const itemRect = item.getBoundingClientRect();
