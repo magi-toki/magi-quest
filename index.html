@@ -723,6 +723,9 @@ h1 {
   </div>
   <div class="grid" id="grid"></div>
   <p class="note" data-i="gal_note"></p>
+   <div class="c" id="ending-prompt-gallery" hidden>
+ <button class="btn" type="button" data-go="ending" data-i="ending_prompt"></button>
+</div>
  </div>
 </section>
 
@@ -743,6 +746,9 @@ h1 {
   </div>
  </div>
  <p class="note" data-i="msg_note"></p>
+  <div class="c" id="ending-prompt-messages" hidden>
+ <button class="btn" type="button" data-go="ending" data-i="ending_prompt"></button>
+</div>
 </section>
 
 <section id="v-secret" class="view" hidden>
@@ -1209,6 +1215,7 @@ ja:{
  cmd_t:'トップにもどる',
  gal_h:'GALLERY / さくひんギャラリー',
  gal_n:'マギから届いた作品をえらんで、たからばこを開こう。',
+ ending_prompt:'エンディングを見る',
  empty:'表示できる作品がありません。',
  snote:'これはサンプル作品です。',
  msg_h:'MESSAGE / おいわいメッセージ',
@@ -1241,6 +1248,7 @@ ko:{
  cmd_t:'처음으로',
  gal_h:'GALLERY / 작품 갤러리',
  gal_n:'마기가 보내준 작품을 골라 보물상자를 열어 봐요.',
+ ending_prompt:'엔딩 보기',
  empty:'표시할 작품이 없습니다.',
  snote:'샘플 작품입니다.',
  msg_h:'MESSAGE / 축하 메시지',
@@ -1470,12 +1478,14 @@ function allMessagesRead(){
  return MSGS.length>0&&MSGS.every((m,index)=>readMessages.has(String(index)));
 }
 
-let endingUnlocked=false;
-
 function maybeShowEnding(){
- if(endingUnlocked||!allWorksViewed()||!allMessagesRead())return;
- endingUnlocked=true;
- location.hash='ending';
+ const complete=allWorksViewed()&&allMessagesRead();
+
+ const galleryPrompt=$('ending-prompt-gallery');
+ const messagesPrompt=$('ending-prompt-messages');
+
+ if(galleryPrompt)galleryPrompt.hidden=!complete;
+ if(messagesPrompt)messagesPrompt.hidden=!complete;
 }
 
 
@@ -1845,6 +1855,7 @@ hy(document);
 birthdayBlink();
 applyLang();
 grid();
+maybeShowEnding();
 route();
 
 </script>
