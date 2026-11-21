@@ -824,7 +824,6 @@ h1 {
     <p class="c">SCORE：<span id="game-final-score">0</span></p>
     <p class="c">🍓：<span id="game-berry-count">0</span></p>
     <p class="c">🍨：<span id="game-parfait-count">0</span></p>
-    <div class="c">
    </div>
   </div>
 
@@ -2112,20 +2111,20 @@ route();
 
     const type = Math.random();
 
-    if (type < 0.28) {
+if (type < 0.20) {
   item.appendChild(px('berry', 3));
   item.dataset.type = 'berry';
-} else if (type < 0.53) {
+} else if (type < 0.40) {
   item.appendChild(px('parfait', 3));
   item.dataset.type = 'parfait';
-} else if (type < 0.55) {
+} else if (type < 0.42) {
   item.appendChild(px('parfait', 3));
   item.firstChild.style.filter = 'sepia(1) saturate(4) hue-rotate(350deg)';
   item.dataset.type = 'golden';
-} else if (type < 0.78) {
+} else if (type < 0.72) {
   item.textContent = '🪨';
   item.classList.add('game-obstacle');
-  item.dataset.type = 'meteor';
+  item.dataset.type = 'rock';
 } else {
   item.textContent = '💩';
   item.classList.add('game-obstacle');
@@ -2222,8 +2221,8 @@ route();
 
       if (timeLeft === 20) {
   clearInterval(fallingTimer);
-  fallSpeed = 1.8;
-  fallingTimer = setInterval(createFallingItem, 300);
+  fallSpeed = 2.5;
+  fallingTimer = setInterval(createFallingItem, 220);
 }
 
       if (timeLeft <= 0) {
