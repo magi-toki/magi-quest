@@ -685,6 +685,19 @@ h1 {
   letter-spacing:5px;
 }
 
+#game-result {
+  position:absolute;
+  inset:0;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:rgba(18,10,42,.9);
+  padding:16px;
+  text-align:center;
+}
+
 #game-result[hidden] {
   display:none;
 }
@@ -794,31 +807,35 @@ h1 {
 <section id="v-game" class="view" hidden>
  <div class="win">
   <h2 class="c">MAGI PARFAIT DASH！</h2>
-  <p class="c">Collect strawberries and parfaits!</p>
-  <p class="c">Avoid meteors and 💩!</p>
+  <p class="c" data-i="game_guide"></p>
 
   <div class="c">
    <p id="game-hearts">💜 💜 💜</p>
-  <p id="game-warning" class="game-warning" hidden>WARNING!!</p>
+   <p id="game-warning" class="game-warning" hidden>WARNING!!</p>
    <p>SCORE：<span id="game-score">0</span></p>
    <p>TIME：<span id="game-time">40</span></p>
   </div>
 
   <div id="game-stage">
-  <img id="game-player" src="images/magi.gif" alt="Magi">
+   <img id="game-player" src="images/magi.gif" alt="Magi">
 
-  <div id="game-result" hidden>
+   <div id="game-result" hidden>
     <h2 class="c" id="game-result-title"></h2>
     <p class="c">SCORE：<span id="game-final-score">0</span></p>
     <p class="c">🍓：<span id="game-berry-count">0</span></p>
     <p class="c">🍨：<span id="game-parfait-count">0</span></p>
     <div class="c">
-      <button class="btn" id="game-retry" type="button">RETRY</button>
-      <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+     <button class="btn" id="game-retry" type="button">RETRY</button>
+     <button class="btn" type="button" data-go="top">BACK TO TOP</button>
     </div>
+   </div>
   </div>
-</div>
 
+  <div class="c">
+   <button class="btn" id="game-start" type="button">START</button>
+   <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+  </div>
+ </div>
 </section>
 
 <section id="v-ending" class="view" hidden>
@@ -1337,8 +1354,9 @@ ja:{
  cmd_g:'さくひんを見る',
  cmd_m:'おいわいメッセージ',
  cmd_t:'トップにもどる',
- gal_h:'GALLERY / さくひんギャラリー',
+  gal_h:'GALLERY / さくひんギャラリー',
  gal_n:'マギから届いた作品をえらんで、たからばこを開こう。',
+ game_guide:'トキニムのためにパフェやいちごをあつめよう！',
  ending_prompt:'エンディングを見る',
  empty:'表示できる作品がありません。',
  snote:'これはサンプル作品です。',
@@ -1370,8 +1388,9 @@ ko:{
  cmd_g:'작품 보기',
  cmd_m:'축하 메시지',
  cmd_t:'처음으로',
- gal_h:'GALLERY / 작품 갤러리',
+  gal_h:'GALLERY / 작품 갤러리',
  gal_n:'마기가 보내준 작품을 골라 보물상자를 열어 봐요.',
+ game_guide:'토키님을 위해 파르페와 딸기를 모으자!',
  ending_prompt:'엔딩 보기',
  empty:'표시할 작품이 없습니다.',
  snote:'샘플 작품입니다.',
