@@ -1356,7 +1356,7 @@ ja:{
  cmd_t:'トップにもどる',
   gal_h:'GALLERY / さくひんギャラリー',
  gal_n:'マギから届いた作品をえらんで、たからばこを開こう。',
- game_guide:'トキニムのためにパフェやいちごをあつめよう！',
+ game_guide:'トキニムのお祝いのためにパフェといちごをあつめよう！',
  ending_prompt:'エンディングを見る',
  empty:'表示できる作品がありません。',
  snote:'これはサンプル作品です。',
@@ -1390,7 +1390,7 @@ ko:{
  cmd_t:'처음으로',
   gal_h:'GALLERY / 작품 갤러리',
  gal_n:'마기가 보내준 작품을 골라 보물상자를 열어 봐요.',
- game_guide:'토키님을 위해 파르페와 딸기를 모으자!',
+ game_guide:'토키님의 생일을 축하하기 위해 파르페와 딸기를 모으자!',
  ending_prompt:'엔딩 보기',
  empty:'표시할 작품이 없습니다.',
  snote:'샘플 작품입니다.',
@@ -2085,7 +2085,7 @@ route();
     scoreEl.textContent = score;
     heartsEl.textContent = '💜 '.repeat(hearts).trim() || '💔';
     timeEl.textContent = timeLeft;
-    document.getElementById('game-warning').hidden = timeLeft > 10;
+    document.getElementById('game-warning').hidden = timeLeft > 20;
   }
 
   function finishGame(clear) {
@@ -2116,21 +2116,25 @@ route();
 
     const type = Math.random();
 
-    if (type < 0.4) {
-      item.appendChild(px('berry', 3));
-      item.dataset.type = 'berry';
-    } else if (type < 0.7) {
-      item.appendChild(px('parfait', 3));
-      item.dataset.type = 'parfait';
-    } else if (type < 0.85) {
-      item.textContent = '☄️';
-      item.classList.add('game-obstacle');
-      item.dataset.type = 'meteor';
-    } else {
-      item.textContent = '💩';
-      item.classList.add('game-obstacle');
-      item.dataset.type = 'poop';
-    }
+    if (type < 0.28) {
+  item.appendChild(px('berry', 3));
+  item.dataset.type = 'berry';
+} else if (type < 0.53) {
+  item.appendChild(px('parfait', 3));
+  item.dataset.type = 'parfait';
+} else if (type < 0.55) {
+  item.appendChild(px('parfait', 3));
+  item.firstChild.style.filter = 'sepia(1) saturate(4) hue-rotate(350deg)';
+  item.dataset.type = 'golden';
+} else if (type < 0.78) {
+  item.textContent = '☄️';
+  item.classList.add('game-obstacle');
+  item.dataset.type = 'meteor';
+} else {
+  item.textContent = '💩';
+  item.classList.add('game-obstacle');
+  item.dataset.type = 'poop';
+}
 
     const maxX = Math.max(0, stage.clientWidth - 45);
     item.style.left = Math.random() * maxX + 'px';
@@ -2164,10 +2168,13 @@ route();
         score += 10;
         berries++;
       } else if (type === 'parfait') {
-        score += 30;
-        parfaits++;
-      } else {
-        hearts--;
+  score += 30;
+  parfaits++;
+} else if (type === 'golden') {
+  score += 1000;
+  parfaits++;
+} else {
+  hearts--;
 
         if (hearts <= 0) {
           hearts = 0;
@@ -2217,16 +2224,10 @@ route();
       timeLeft--;
       updateDisplay();
 
-      if (timeLeft === 25) {
+      if (timeLeft === 20) {
   clearInterval(fallingTimer);
-  fallSpeed = 1.25;
-  fallingTimer = setInterval(createFallingItem, 600);
-}
-
-if (timeLeft === 10) {
-  clearInterval(fallingTimer);
-  fallSpeed = 1.7;
-  fallingTimer = setInterval(createFallingItem, 400);
+  fallSpeed = 1.8;
+  fallingTimer = setInterval(createFallingItem, 300);
 }
 
       if (timeLeft <= 0) {
