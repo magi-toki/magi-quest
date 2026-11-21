@@ -825,9 +825,6 @@ h1 {
     <p class="c">🍓：<span id="game-berry-count">0</span></p>
     <p class="c">🍨：<span id="game-parfait-count">0</span></p>
     <div class="c">
-     <button class="btn" id="game-retry" type="button">RETRY</button>
-     <button class="btn" type="button" data-go="top">BACK TO TOP</button>
-    </div>
    </div>
   </div>
 
@@ -2049,7 +2046,6 @@ route();
   const stage = document.getElementById('game-stage');
   const player = document.getElementById('game-player');
   const startButton = document.getElementById('game-start');
-  const retryButton = document.getElementById('game-retry');
 
   if (!stage || !player || !startButton) return;
 
@@ -2127,7 +2123,7 @@ route();
   item.firstChild.style.filter = 'sepia(1) saturate(4) hue-rotate(350deg)';
   item.dataset.type = 'golden';
 } else if (type < 0.78) {
-  item.textContent = '☄️';
+  item.textContent = '🪨';
   item.classList.add('game-obstacle');
   item.dataset.type = 'meteor';
 } else {
@@ -2238,9 +2234,6 @@ route();
 
   startButton.addEventListener('click', startGame);
 
-  if (retryButton) {
-    retryButton.addEventListener('click', startGame);
-  }
 })();
 
 
