@@ -2219,10 +2219,10 @@ if (type < 0.20) {
       timeLeft--;
       updateDisplay();
 
-      if (timeLeft === 20) {
+      if (timeLeft === 10) {
   clearInterval(fallingTimer);
-  fallSpeed = 2.5;
-  fallingTimer = setInterval(createFallingItem, 220);
+  fallSpeed = 1.8;
+  fallingTimer = setInterval(createFallingItem, 300);
 }
 
       if (timeLeft <= 0) {
