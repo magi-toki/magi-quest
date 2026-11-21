@@ -2058,7 +2058,6 @@ route();
   let timeLeft = 40;
   let fallSpeed = 1;
   let running = false;
-  document.getElementById('game-warning').hidden = true;
 
   const scoreEl = document.getElementById('game-score');
   const heartsEl = document.getElementById('game-hearts');
@@ -2072,9 +2071,7 @@ route();
   cancelAnimationFrame(collisionFrame);
 
   stage.querySelectorAll('.game-fall').forEach(item => item.remove());
-
-  document.getElementById('game-warning').hidden = true;
-};
+ };
 
   function updateDisplay() {
     scoreEl.textContent = score;
