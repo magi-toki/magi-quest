@@ -650,8 +650,10 @@ h1 {
   position:relative;
   width:100%;
   max-width:420px;
-  height:560px;
-  margin:20px auto;
+  height:min(52vh, 420px);
+  min-height:280px;
+  max-height:420px;
+  margin:10px auto;
   overflow:hidden;
   touch-action:none;
   border:4px solid #c9a8ff;
@@ -689,9 +691,9 @@ h1 {
 
 @media(max-width:480px) {
   #game-stage {
-    height:65vh;
-    min-height:420px;
-    max-height:560px;
+    height:48vh;
+    min-height:260px;
+    max-height:380px;
   }
 }
 
@@ -727,6 +729,13 @@ h1 {
   animation:bl .3s steps(2) infinite;
 }
 
+.game-fall,
+.game-obstacle {
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  outline:none !important;
+}
   
 </style>
 
@@ -796,28 +805,21 @@ h1 {
   </div>
 
   <div id="game-stage">
-   <img id="game-player" src="images/magi.gif" alt="Magi">
-  </div>
-
-  <div class="c">
-   <button class="btn" id="game-start" type="button">START</button>
-   <button class="btn" type="button" data-go="top">BACK TO TOP</button>
-  </div>
+  <img id="game-player" src="images/magi.gif" alt="Magi">
 
   <div id="game-result" hidden>
-   <h2 class="c" id="game-result-title"></h2>
-   <p class="c">SCORE：<span id="game-final-score">0</span></p>
-   <p class="c">🍓：<span id="game-berry-count">0</span></p>
-   <p class="c">🍨：<span id="game-parfait-count">0</span></p>
-   <div class="c">
-    <button class="btn" id="game-retry" type="button">RETRY</button>
-    <button class="btn" type="button" data-go="top">BACK TO TOP</button>
-   </div>
+    <h2 class="c" id="game-result-title"></h2>
+    <p class="c">SCORE：<span id="game-final-score">0</span></p>
+    <p class="c">🍓：<span id="game-berry-count">0</span></p>
+    <p class="c">🍨：<span id="game-parfait-count">0</span></p>
+    <div class="c">
+      <button class="btn" id="game-retry" type="button">RETRY</button>
+      <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+    </div>
   </div>
- </div>
-</section>
+</div>
 
-  
+</section>
 
 <section id="v-ending" class="view" hidden>
  <div class="win ending-content">
