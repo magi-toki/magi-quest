@@ -811,13 +811,12 @@ h1 {
 
   <div class="c">
    <p id="game-hearts">💜 💜 💜</p>
-   <p id="game-warning" class="game-warning" hidden>WARNING!!</p>
    <p>SCORE：<span id="game-score">0</span></p>
    <p>TIME：<span id="game-time">40</span></p>
   </div>
 
   <div id="game-stage">
-   <img id="game-player" src="images/magi.gif" alt="Magi">
+   <img id="game-player" src="images/magi.gif" alt="Magi" draggable="false">
 
    <div id="game-result" hidden>
     <h2 class="c" id="game-result-title"></h2>
@@ -2022,10 +2021,11 @@ route();
   }
 
   stage.addEventListener('pointerdown', e => {
-    dragging = true;
-    stage.setPointerCapture(e.pointerId);
-    movePlayer(e);
-  });
+  e.preventDefault();
+  dragging = true;
+  stage.setPointerCapture(e.pointerId);
+  movePlayer(e);
+});
 
   stage.addEventListener('pointermove', e => {
     if (dragging) movePlayer(e);
@@ -2080,7 +2080,6 @@ route();
     scoreEl.textContent = score;
     heartsEl.textContent = '💜 '.repeat(hearts).trim() || '💔';
     timeEl.textContent = timeLeft;
-    document.getElementById('game-warning').hidden = timeLeft > 20;
   }
 
   function finishGame(clear) {
