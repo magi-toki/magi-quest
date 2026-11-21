@@ -643,6 +643,91 @@ h1 {
   margin-top:12px;
 }
 
+
+
+/* ===== MAGI PARFAIT DASH ===== */
+#game-stage {
+  position:relative;
+  width:100%;
+  max-width:420px;
+  height:560px;
+  margin:20px auto;
+  overflow:hidden;
+  touch-action:none;
+  border:4px solid #c9a8ff;
+  background-color:#120a2a;
+  background-image:
+    radial-gradient(circle,#fff 1px,transparent 1.5px),
+    radial-gradient(circle,#c9a8ff 1px,transparent 1.5px),
+    linear-gradient(#24124d,#120a2a);
+  background-size:37px 43px,61px 67px,100% 100%;
+  box-shadow:0 0 0 3px #7a55d6,0 0 18px #7a55d6;
+}
+
+#game-player {
+  position:absolute;
+  width:76px;
+  height:76px;
+  object-fit:contain;
+  left:50%;
+  bottom:16px;
+  transform:translateX(-50%);
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+#game-hearts {
+  color:#c9a8ff;
+  font-size:22px;
+  letter-spacing:5px;
+}
+
+#game-result[hidden] {
+  display:none;
+}
+
+@media(max-width:480px) {
+  #game-stage {
+    height:65vh;
+    min-height:420px;
+    max-height:560px;
+  }
+}
+
+/* ===== MAGI PARFAIT DASH：落下アイテム ===== */
+.game-fall {
+  position:absolute;
+  top:-50px;
+  display:block;
+  animation:game-fall linear forwards;
+  pointer-events:none;
+  z-index:2;
+}
+
+@keyframes game-fall {
+  from {
+    transform:translateY(0) rotate(0deg);
+  }
+  to {
+    transform:translateY(650px) rotate(360deg);
+  }
+}
+
+.game-obstacle {
+  font-size:32px;
+  line-height:1;
+}
+
+.game-warning {
+  color:#ff4f6d;
+  font-size:24px;
+  font-weight:bold;
+  text-align:center;
+  animation:bl .3s steps(2) infinite;
+}
+
+  
 </style>
 
 </head>
@@ -692,10 +777,47 @@ h1 {
   <h2 data-i="cmd_h"></h2>
   <button class="cmd" data-go="gallery"><i data-s="chestC" data-z="2"></i><span data-i="cmd_g"></span></button>
   <button class="cmd" data-go="messages"><i data-s="letter" data-z="2"></i><span data-i="cmd_m"></span></button>
-  <button class="cmd" data-go="top"><i data-s="star" data-z="2"></i><span data-i="cmd_t"></span></button>
+  <button class="cmd" data-go="game"><i data-s="star" data-z="2"></i><span>MAGI PARFAIT DASH！</span></button>
  </div>
 </section>
 
+
+<section id="v-game" class="view" hidden>
+ <div class="win">
+  <h2 class="c">MAGI PARFAIT DASH！</h2>
+  <p class="c">Collect strawberries and parfaits!</p>
+  <p class="c">Avoid meteors and 💩!</p>
+
+  <div class="c">
+   <p id="game-hearts">💜 💜 💜</p>
+  <p id="game-warning" class="game-warning" hidden>WARNING!!</p>
+   <p>SCORE：<span id="game-score">0</span></p>
+   <p>TIME：<span id="game-time">40</span></p>
+  </div>
+
+  <div id="game-stage">
+   <img id="game-player" src="images/magi.gif" alt="Magi">
+  </div>
+
+  <div class="c">
+   <button class="btn" id="game-start" type="button">START</button>
+   <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+  </div>
+
+  <div id="game-result" hidden>
+   <h2 class="c" id="game-result-title"></h2>
+   <p class="c">SCORE：<span id="game-final-score">0</span></p>
+   <p class="c">🍓：<span id="game-berry-count">0</span></p>
+   <p class="c">🍨：<span id="game-parfait-count">0</span></p>
+   <div class="c">
+    <button class="btn" id="game-retry" type="button">RETRY</button>
+    <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+  
 
 <section id="v-ending" class="view" hidden>
  <div class="win ending-content">
@@ -1566,7 +1688,10 @@ function route(){
  stopAllSounds();
 
  const h=location.hash.slice(1);
- const v=['gallery','messages','secret','ending'].includes(h)?h:'top';
+ const v=['gallery','messages','secret','ending','game'].includes(h)?h:'top';
+ if (v !== 'game' && window.stopMagiGame) {
+  window.stopMagiGame();
+}
 
  closeW();
 
@@ -1857,6 +1982,245 @@ applyLang();
 grid();
 maybeShowEnding();
 route();
+
+// ===== MAGI PARFAIT DASH：プレイヤー移動 =====
+(() => {
+  const stage = document.getElementById('game-stage');
+  const player = document.getElementById('game-player');
+
+  if (!stage || !player) return;
+
+  let dragging = false;
+
+  function movePlayer(e) {
+    const rect = stage.getBoundingClientRect();
+    const half = player.offsetWidth / 2;
+
+    const x = Math.max(
+      half,
+      Math.min(rect.width - half, e.clientX - rect.left)
+    );
+
+    player.style.left = `${x}px`;
+  }
+
+  stage.addEventListener('pointerdown', e => {
+    dragging = true;
+    stage.setPointerCapture(e.pointerId);
+    movePlayer(e);
+  });
+
+  stage.addEventListener('pointermove', e => {
+    if (dragging) movePlayer(e);
+  });
+
+  stage.addEventListener('pointerup', () => {
+    dragging = false;
+  });
+
+  stage.addEventListener('pointercancel', () => {
+    dragging = false;
+  });
+})();
+
+// ===== MAGI PARFAIT DASH：ゲーム本体 =====
+(() => {
+  const stage = document.getElementById('game-stage');
+  const player = document.getElementById('game-player');
+  const startButton = document.getElementById('game-start');
+  const retryButton = document.getElementById('game-retry');
+
+  if (!stage || !player || !startButton) return;
+
+  let fallingTimer = null;
+  let collisionFrame = null;
+  let countdownTimer = null;
+  let score = 0;
+  let berries = 0;
+  let parfaits = 0;
+  let hearts = 3;
+  let timeLeft = 40;
+  let fallSpeed = 1;
+  let running = false;
+  document.getElementById('game-warning').hidden = true;
+
+  const scoreEl = document.getElementById('game-score');
+  const heartsEl = document.getElementById('game-hearts');
+  const timeEl = document.getElementById('game-time');
+  const resultEl = document.getElementById('game-result');
+  window.stopMagiGame = function() {
+  running = false;
+
+  clearInterval(fallingTimer);
+  clearInterval(countdownTimer);
+  cancelAnimationFrame(collisionFrame);
+
+  stage.querySelectorAll('.game-fall').forEach(item => item.remove());
+
+  document.getElementById('game-warning').hidden = true;
+};
+
+  function updateDisplay() {
+    scoreEl.textContent = score;
+    heartsEl.textContent = '💜 '.repeat(hearts).trim() || '💔';
+    timeEl.textContent = timeLeft;
+    document.getElementById('game-warning').hidden = timeLeft > 10;
+  }
+
+  function finishGame(clear) {
+    if (!running) return;
+
+    running = false;
+    clearInterval(fallingTimer);
+    clearInterval(countdownTimer);
+    cancelAnimationFrame(collisionFrame);
+
+    stage.querySelectorAll('.game-fall').forEach(item => item.remove());
+
+    document.getElementById('game-result-title').textContent =
+      clear ? 'GAME CLEAR!' : 'GAME OVER';
+
+    document.getElementById('game-final-score').textContent = score;
+    document.getElementById('game-berry-count').textContent = berries;
+    document.getElementById('game-parfait-count').textContent = parfaits;
+
+    resultEl.hidden = false;
+  }
+
+  function createFallingItem() {
+    if (!running) return;
+
+    const item = document.createElement('div');
+    item.className = 'game-fall';
+
+    const type = Math.random();
+
+    if (type < 0.4) {
+      item.appendChild(px('berry', 3));
+      item.dataset.type = 'berry';
+    } else if (type < 0.7) {
+      item.appendChild(px('parfait', 3));
+      item.dataset.type = 'parfait';
+    } else if (type < 0.85) {
+      item.textContent = '☄️';
+      item.classList.add('game-obstacle');
+      item.dataset.type = 'meteor';
+    } else {
+      item.textContent = '💩';
+      item.classList.add('game-obstacle');
+      item.dataset.type = 'poop';
+    }
+
+    const maxX = Math.max(0, stage.clientWidth - 45);
+    item.style.left = Math.random() * maxX + 'px';
+    item.style.animationDuration = ((3 + Math.random() * 2) / fallSpeed) + 's';
+
+    item.addEventListener('animationend', () => item.remove());
+
+    stage.appendChild(item);
+  }
+
+  function checkCollision() {
+    if (!running) return;
+
+    const playerRect = player.getBoundingClientRect();
+
+    stage.querySelectorAll('.game-fall').forEach(item => {
+      const itemRect = item.getBoundingClientRect();
+
+      const hit =
+        playerRect.left < itemRect.right &&
+        playerRect.right > itemRect.left &&
+        playerRect.top < itemRect.bottom &&
+        playerRect.bottom > itemRect.top;
+
+      if (!hit) return;
+
+      const type = item.dataset.type;
+      item.remove();
+
+      if (type === 'berry') {
+        score += 10;
+        berries++;
+      } else if (type === 'parfait') {
+        score += 30;
+        parfaits++;
+      } else {
+        hearts--;
+
+        if (hearts <= 0) {
+          hearts = 0;
+          updateDisplay();
+          finishGame(false);
+          return;
+        }
+      }
+
+      updateDisplay();
+    });
+
+    if (running) {
+      collisionFrame = requestAnimationFrame(checkCollision);
+    }
+  }
+
+  function startGame() {
+    if (running) return;
+
+    clearInterval(fallingTimer);
+    clearInterval(countdownTimer);
+    cancelAnimationFrame(collisionFrame);
+
+    stage.querySelectorAll('.game-fall').forEach(item => item.remove());
+
+    score = 0;
+    berries = 0;
+    parfaits = 0;
+    hearts = 3;
+    timeLeft = 40;
+    fallSpeed = 1;
+    running = true;
+
+    resultEl.hidden = true;
+    player.style.left = '50%';
+    updateDisplay();
+
+    createFallingItem();
+
+    fallingTimer = setInterval(createFallingItem, 750);
+    collisionFrame = requestAnimationFrame(checkCollision);
+
+    countdownTimer = setInterval(() => {
+      if (!running) return;
+
+      timeLeft--;
+      updateDisplay();
+
+      if (timeLeft === 25) {
+  clearInterval(fallingTimer);
+  fallSpeed = 1.25;
+  fallingTimer = setInterval(createFallingItem, 600);
+}
+
+if (timeLeft === 10) {
+  clearInterval(fallingTimer);
+  fallSpeed = 1.7;
+  fallingTimer = setInterval(createFallingItem, 400);
+}
+
+      if (timeLeft <= 0) {
+        finishGame(true);
+      }
+    }, 1000);
+  }
+
+  startButton.addEventListener('click', startGame);
+
+  if (retryButton) {
+    retryButton.addEventListener('click', startGame);
+  }
+})();
+
 
 </script>
 </body>
