@@ -1256,6 +1256,67 @@ function playTextTick(){
  sound(1120,920,.03,.032,'square');
 }
 
+/* ===== MAGI PARFAIT DASH：ゲーム音 ===== */
+let gameBgmTimer = null;
+let gameBgmIndex = 0;
+
+const gameBgmNotes = [
+  523, 659, 784, 659,
+  587, 698, 880, 698,
+  523, 659, 784, 988,
+  880, 784, 659, 523
+];
+
+function startGameBgm(){
+  stopGameBgm();
+  gameBgmIndex = 0;
+
+  const playNext = () => {
+    const note = gameBgmNotes[gameBgmIndex];
+    sound(note, note, .13, .025, 'square');
+    gameBgmIndex = (gameBgmIndex + 1) % gameBgmNotes.length;
+  };
+
+  playNext();
+  gameBgmTimer = setInterval(playNext, 160);
+}
+
+function stopGameBgm(){
+  if(gameBgmTimer){
+    clearInterval(gameBgmTimer);
+    gameBgmTimer = null;
+  }
+}
+
+function playGameStart(){
+  sound(523,784,.12,.07,'square');
+  sound(784,1047,.16,.06,'square',.12);
+}
+
+function playBerryGet(){
+  sound(880,1175,.09,.045,'square');
+}
+
+function playParfaitGet(){
+  sound(659,988,.12,.05,'square');
+  sound(988,1318,.12,.04,'square',.09);
+}
+
+function playDamage(){
+  sound(220,90,.22,.08,'sawtooth');
+  sound(150,60,.18,.06,'square',.08);
+}
+
+function playGameClear(){
+  playRareTreasure();
+}
+
+function playGameOver(){
+  sound(440,330,.18,.06,'square');
+  sound(330,220,.22,.06,'square',.18);
+  sound(220,110,.35,.07,'triangle',.38);
+}
+
 function unlockAudio(){
  const ctx=getAudio();
 
@@ -2057,7 +2118,7 @@ route();
   let hearts = 3;
   let timeLeft = 40;
   let fallSpeed = 1;
-  let running = false;
+    let running = false;
 
   const scoreEl = document.getElementById('game-score');
   const heartsEl = document.getElementById('game-hearts');
@@ -2065,6 +2126,7 @@ route();
   const resultEl = document.getElementById('game-result');
   window.stopMagiGame = function() {
   running = false;
+  stopGameBgm();
 
   clearInterval(fallingTimer);
   clearInterval(countdownTimer);
@@ -2082,7 +2144,16 @@ route();
   function finishGame(clear) {
     if (!running) return;
 
-    running = false;
+        running = false;
+
+    stopGameBgm();
+
+    if (clear) {
+      playGameClear();
+    } else {
+      playGameOver();
+    }
+
     clearInterval(fallingTimer);
     clearInterval(countdownTimer);
     cancelAnimationFrame(collisionFrame);
@@ -2136,7 +2207,7 @@ if (type < 0.20) {
     stage.appendChild(item);
   }
 
-  function checkCollision() {
+    function checkCollision() {
     if (!running) return;
 
     const playerRect = player.getBoundingClientRect();
@@ -2158,14 +2229,21 @@ if (type < 0.20) {
       if (type === 'berry') {
         score += 10;
         berries++;
+        playBerryGet();
+
       } else if (type === 'parfait') {
-  score += 30;
-  parfaits++;
-} else if (type === 'golden') {
-  score += 1000;
-  parfaits++;
-} else {
-  hearts--;
+        score += 30;
+        parfaits++;
+        playParfaitGet();
+
+      } else if (type === 'golden') {
+        score += 1000;
+        parfaits++;
+        playRareTreasure();
+
+      } else {
+        hearts--;
+        playDamage();
 
         if (hearts <= 0) {
           hearts = 0;
@@ -2198,7 +2276,11 @@ if (type < 0.20) {
     hearts = 3;
     timeLeft = 40;
     fallSpeed = 1;
-    running = true;
+        running = true;
+
+    unlockAudio();
+    startGameBgm();
+    playGameStart();
 
     resultEl.hidden = true;
     player.style.left = '50%';
