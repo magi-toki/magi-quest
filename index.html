@@ -807,6 +807,51 @@ h1 {
   left:50%;bottom:8px;transform:translateX(-50%);
   pointer-events:none;user-select:none;-webkit-user-drag:none;z-index:4;
 }
+
+/* 日本語版スマホ専用：ゲーム画面右下の3択パネル */
+#typing-choice-panel {
+  position:absolute;
+  right:7px;
+  bottom:7px;
+  z-index:8;
+  width:142px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:7px;
+  background:rgba(18,10,42,.88);
+  border:2px solid #c9a8ff;
+  box-shadow:0 0 0 2px #7a55d6,0 0 10px rgba(201,168,255,.55);
+}
+
+#typing-choice-panel[hidden] {
+  display:none !important;
+}
+
+.typing-choice {
+  width:100%;
+  min-height:32px;
+  padding:4px 5px;
+  border:1px solid #ffd23f;
+  border-radius:0;
+  background:#2c1668;
+  color:#fff;
+  font:inherit;
+  font-size:13px;
+  line-height:1.3;
+  cursor:pointer;
+  overflow-wrap:anywhere;
+}
+
+.typing-choice:active,
+.typing-choice:hover {
+  background:#7a55d6;
+}
+
+.typing-choice:disabled {
+  opacity:.5;
+  cursor:default;
+}
 .typing-enemy {
   position:absolute;top:-125px;left:50%;width:170px;
   transform:translateX(-50%);z-index:3;text-align:center;
@@ -1036,7 +1081,7 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
     margin: 4px 0;
   }
 
-  #typing-answer {
+    #typing-answer {
     font-size: 16px;
     min-height: 44px;
   }
@@ -1048,6 +1093,12 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   #typing-submit {
     margin: 0;
     padding: 6px 10px;
+  }
+
+  /* 日本語版スマホでは3択を使うため、入力欄を隠す */
+  #v-typing-game.ja-mobile-choice .typing-input-row,
+  #v-typing-game.ja-mobile-choice #typing-current-word {
+    display:none !important;
   }
 }
 
@@ -2901,10 +2952,17 @@ const playerRect = {
     </div>
 
     <img
-      id="typing-player"
-      src="images/magi.gif"
-      alt="Magi"
-    >
+  id="typing-player"
+  src="images/magi.gif"
+  alt="Magi"
+>
+
+<!-- 日本語版スマホ専用：3択回答パネル -->
+<div id="typing-choice-panel" hidden>
+  <button type="button" class="typing-choice"></button>
+  <button type="button" class="typing-choice"></button>
+  <button type="button" class="typing-choice"></button>
+</div>
 
     <div id="typing-result" hidden>
       <h2 id="typing-result-title"></h2>
@@ -3143,6 +3201,118 @@ const playerRect = {
     return copy;
   }
 
+    // 日本語版かつスマホ幅のときだけ3択モードにする
+  function isJapaneseMobileChoiceMode() {
+    return !isKorean() &&
+      window.matchMedia('(max-width: 480px)').matches;
+  }
+
+  // 現在の問題に対する3つの選択肢を作る
+    function makeChoiceOptions() {
+    const accepted = current.jaAnswers.map(answer =>
+      toHiragana(answer).replace(/\s+/g, '')
+    );
+
+    const distractors = [];
+
+    vocab.forEach(item => {
+      item.jaAnswers.forEach(answer => {
+        const normalized = toHiragana(answer).replace(/\s+/g, '');
+
+        if (
+          normalized &&
+          !accepted.includes(normalized) &&
+          !distractors.some(option =>
+            toHiragana(option).replace(/\s+/g, '') === normalized
+          )
+        ) {
+          distractors.push(answer);
+        }
+      });
+    });
+
+    // 正解候補から1つ、誤答候補から2つ選ぶ
+    const correctOption = shuffle(current.jaAnswers)[0];
+    const wrongOptions = shuffle(distractors).slice(0, 2);
+
+    return shuffle([correctOption, ...wrongOptions]);
+  }
+
+  // 3択パネルを表示する
+  function showChoiceOptions() {
+    const panel = $('typing-choice-panel');
+    if (!panel) return;
+
+    panel.replaceChildren();
+
+    const options = makeChoiceOptions();
+
+    options.forEach(answer => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'typing-choice';
+      button.textContent = answer;
+
+      button.addEventListener('click', () => {
+        submitChoiceAnswer(answer);
+      });
+
+      panel.appendChild(button);
+    });
+
+    panel.hidden = false;
+  }
+
+  // 3択の回答を判定する
+  function submitChoiceAnswer(raw) {
+    if (!running || answering) return;
+
+    const answer = toHiragana(raw).replace(/\s+/g, '');
+
+    const isCorrect = current.jaAnswers.some(item =>
+      toHiragana(item).replace(/\s+/g, '') === answer
+    );
+
+    if (!isCorrect) {
+      $('typing-feedback').textContent = 'もう一度！';
+      return;
+    }
+
+    resolveCorrectAnswer();
+  }
+
+  // 正解時の共通処理
+  function resolveCorrectAnswer() {
+    if (!running || answering) return;
+
+    answering = true;
+    cancelAnimationFrame(raf);
+
+    score += 100;
+    updateHud();
+
+    soundEffect('hit');
+
+    enemy.classList.add('typing-explode');
+
+    $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
+
+    const panel = $('typing-choice-panel');
+    if (panel) panel.hidden = true;
+
+    setTimeout(() => {
+      if (running) {
+        nextQuestion();
+
+        if (running) {
+          answering = false;
+          lastTime = performance.now();
+          raf = requestAnimationFrame(frame);
+        }
+      }
+    }, 650);
+  }
+
   function toHiragana(value) {
     return value.replace(/[ァ-ヶ]/g, ch =>
       String.fromCharCode(ch.charCodeAt(0) - 0x60)
@@ -3321,17 +3491,31 @@ const playerRect = {
       }
     });
 
-    updateHud();
-    
-  if (current) {
-  const shownWord = isKorean()
-    ? current.koQuestion
-    : current.jaQuestion;
+        updateHud();
 
-  wordEl.textContent = shownWord;
-  $('typing-current-word').textContent = shownWord;
-  wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
-}
+    // 言語切り替え時に回答方式も更新
+    const choiceMode = isJapaneseMobileChoiceMode();
+
+    game.classList.toggle('ja-mobile-choice', choiceMode);
+    input.disabled = choiceMode;
+
+    const choicePanel = $('typing-choice-panel');
+
+    if (choiceMode && running && current && !answering) {
+      showChoiceOptions();
+    } else {
+      choicePanel.hidden = true;
+    }
+
+    if (current) {
+      const shownWord = isKorean()
+        ? current.koQuestion
+        : current.jaQuestion;
+
+      wordEl.textContent = shownWord;
+      $('typing-current-word').textContent = shownWord;
+      wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
+    }
   }
 
   /* ---------- HUD ---------- */
@@ -3381,8 +3565,19 @@ const playerRect = {
   enemy.classList.remove('typing-explode');
   enemy.hidden = false;
 
-  input.value = '';
+   input.value = '';
   $('typing-feedback').textContent = '';
+
+  const choicePanel = $('typing-choice-panel');
+
+  if (isJapaneseMobileChoiceMode()) {
+    input.disabled = true;
+    showChoiceOptions();
+  } else {
+    input.disabled = false;
+    choicePanel.hidden = true;
+  }
+
   updateHud();
 }
    
@@ -3406,36 +3601,14 @@ const playerRect = {
     item => item.replace(/\s+/g, '') === answer
   );
 
-  if (!isCorrect) {
+    if (!isCorrect) {
     $('typing-feedback').textContent = isKorean()
       ? '다시 도전!'
       : 'もう一度！';
     return;
   }
 
-    answering = true;
-  cancelAnimationFrame(raf);
-
-    score += 100;
-  updateHud();
-
-  soundEffect('hit');
-
-  enemy.classList.add('typing-explode');
-
-  $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
-
-  setTimeout(() => {
-    if (running) {
-      nextQuestion();
-
-      if (running) {
-        answering = false;
-        lastTime = performance.now();
-        raf = requestAnimationFrame(frame);
-      }
-    }
-  }, 650);
+  resolveCorrectAnswer();
 }
 
   /* ---------- 次の問題 ---------- */
@@ -3453,12 +3626,12 @@ const playerRect = {
 
   /* ---------- ゲーム終了 ---------- */
 
-  function finishGame(completed) {
     running = false;
-    cancelAnimationFrame(raf);
-    stopBgm();
-    enemy.hidden = true;
-    result.hidden = false;
+  cancelAnimationFrame(raf);
+  stopBgm();
+  enemy.hidden = true;
+  $('typing-choice-panel').hidden = true;
+  result.hidden = false;
 
     soundEffect(completed ? 'clear' : 'over');
 
@@ -3524,14 +3697,20 @@ const playerRect = {
 
   /* ---------- ゲーム開始 ---------- */
 
-    function startTypingGame() {
-  cancelAnimationFrame(raf);
-  stopBgm();
+      function startTypingGame() {
+    cancelAnimationFrame(raf);
+    stopBgm();
 
-  $('typing-start').hidden = true;
-  game.classList.add('typing-playing');
-  stage.hidden = false;
-  input.disabled = false;
+    $('typing-start').hidden = true;
+    game.classList.add('typing-playing');
+
+    const choiceMode = isJapaneseMobileChoiceMode();
+    game.classList.toggle('ja-mobile-choice', choiceMode);
+
+    $('typing-choice-panel').hidden = true;
+    input.disabled = choiceMode;
+
+    stage.hidden = false;
 
   queue = shuffle(
   vocab.filter(item =>
@@ -3572,18 +3751,20 @@ window.startTypingGame = startTypingGame;
 window.submitTypingAnswer = submitAnswer;
 
 // ゲーム画面を離れたときに停止
-window.stopTypingGame = function() {
-  running = false;
-  cancelAnimationFrame(raf);
-  stopBgm();
-  enemy.hidden = true;
-  result.hidden = true;
+  window.stopTypingGame = function() {
+    running = false;
+    cancelAnimationFrame(raf);
+    stopBgm();
+    enemy.hidden = true;
+    result.hidden = true;
+    $('typing-choice-panel').hidden = true;
 
-  stage.hidden = true;
-  $('typing-start').hidden = false;
-  game.classList.remove('typing-playing');
-  input.disabled = true;
-};
+    stage.hidden = true;
+    $('typing-start').hidden = false;
+    game.classList.remove('typing-playing');
+    game.classList.remove('ja-mobile-choice');
+    input.disabled = true;
+  };
 
 // タイピングゲームを開く
 window.openTypingSecretGame = function() {
