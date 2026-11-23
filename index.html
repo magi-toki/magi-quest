@@ -951,6 +951,52 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 @keyframes magi-shake{0%{transform:translateX(-3px)}50%{transform:translateX(3px)}100%{transform:translateX(0)}}
 
 
+/* ===== MAGI WORD BLASTER：スマホ調整 ===== */
+.typing-current-word {
+  min-height: 1.8em;
+  margin: 8px 0;
+  padding: 8px;
+  color: #ffd23f;
+  background: #120a2a;
+  border: 2px solid #c9a8ff;
+  font-size: 24px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  #typing-stage {
+    height: 34vh;
+    min-height: 190px;
+    max-height: 250px;
+    margin: 8px auto;
+  }
+
+  #typing-player {
+    width: 58px;
+    height: 58px;
+  }
+
+  .typing-controls {
+    margin: 6px auto;
+  }
+
+  .typing-current-word {
+    font-size: 22px;
+    margin: 4px 0;
+  }
+
+  #typing-answer {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .typing-input-row {
+    gap: 6px;
+  }
+}
+
+  
   
 </style>
 
@@ -2155,35 +2201,47 @@ function route(){
  stopAllSounds();
 
  const h=location.hash.slice(1);
- const v=['gallery','messages','secret','ending','game'].includes(h)?h:'top';
- if (v !== 'game' && window.stopMagiGame) {
+const v=['gallery','messages','secret','ending','game','typing-game'].includes(h)?h:'top';
+
+if (v !== 'game' && window.stopMagiGame) {
   window.stopMagiGame();
+}
+
+if (v !== 'typing-game' && window.stopTypingGame) {
+  window.stopTypingGame();
 }
 
  closeW();
 
- document.querySelectorAll('.view').forEach(s=>{
-  s.hidden=s.id!=='v-'+v;
- });
+ const viewId = 'v-' + v;
+
+document.querySelectorAll('.view').forEach(s=>{
+  s.hidden=s.id!==viewId;
+});
 
  $('nav').hidden=v==='top'||v==='secret'||v==='ending';
 
  window.scrollTo(0,0);
 
- if(v==='top'){
+if(v==='top'){
   roll();
- }
-
- if(v==='messages'){
-  mi=0;
-  say();
- }
-
- if(v==='ending'){
-  playBirthdaySong();
- }
 }
 
+if(v==='messages'){
+  mi=0;
+  say();
+}
+
+if(v==='ending'){
+  playBirthdaySong();
+}
+
+if(v==='typing-game'){
+  window.stopTypingGame();
+}
+}
+
+// 画面切り替えイベント
 document.addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');
 
@@ -2719,20 +2777,30 @@ const playerRect = {
 
 
 <!-- ===== MAGI WORD BLASTER GAME ===== -->
-<section id="typing-secret-game" class="win" hidden>
+<section id="v-typing-game" class="view" hidden>
+  <div class="win">
   <h2 class="c">★ MAGI WORD BLASTER！ ★</h2>
 
   <p class="c" id="typing-description">
     落ちてくる言葉を入力して敵を倒そう！
   </p>
 
+<button
+  type="button"
+  class="btn"
+  id="typing-start"
+  onclick="startTypingGame()"
+>
+  START
+</button>
+    
   <div class="typing-hud">
     <span>HP：<b id="typing-hp">♥ ♥ ♥</b></span>
     <span>SCORE：<b id="typing-score">0</b></span>
     <span>QUEST：<b id="typing-progress">0 / 5</b></span>
   </div>
 
-  <div id="typing-stage">
+  <div id="typing-stage" hidden>
     <div class="typing-decor" aria-hidden="true">
       <span>✦</span><span>✧</span><span>★</span><span>✦</span>
       <span>✧</span><span>★</span><span>✦</span><span>✧</span>
@@ -2761,31 +2829,28 @@ const playerRect = {
       <h2 id="typing-result-title"></h2>
       <p id="typing-result-message"></p>
       <p id="typing-result-score"></p>
+      
       <button
-        type="button"
-        class="btn"
-        id="typing-retry"
-        onclick="startTypingGame()"
-      >
-        RETRY
-      </button>
-      <button
-        type="button"
-        class="btn"
-        onclick="closeTypingSecretGame()"
-      >
-        BACK
-      </button>
+  type="button"
+  class="btn"
+  id="typing-retry"
+  onclick="startTypingGame()"
+>
+  もう一度あそぶ
+</button>
+      
     </div>
   </div>
 
   <div class="typing-controls">
     <p id="typing-question">準備中...</p>
+    <p id="typing-current-word" class="typing-current-word"></p>
 
     <div class="typing-input-row">
       <input
-        id="typing-answer"
-        type="text"
+  id="typing-answer"
+  type="text"
+  disabled
         autocomplete="off"
         autocapitalize="off"
         spellcheck="false"
@@ -2850,7 +2915,7 @@ const playerRect = {
   const $ = id => document.getElementById(id);
 
   const entry = $('typing-secret-entry');
-  const game = $('typing-secret-game');
+  const game = $('v-typing-game');
   const stage = $('typing-stage');
   const enemy = $('typing-enemy');
   const wordEl = $('typing-word');
@@ -3119,6 +3184,7 @@ const playerRect = {
 
     const shownWord = isKorean() ? current.ja : current.ko;
     wordEl.textContent = shownWord;
+    $('typing-current-word').textContent = shownWord;
     wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
 
     const iconBox = enemy.querySelector('.typing-enemy-icon');
@@ -3272,10 +3338,14 @@ const playerRect = {
   /* ---------- ゲーム開始 ---------- */
 
   function startTypingGame() {
-    cancelAnimationFrame(raf);
-    stopBgm();
+  cancelAnimationFrame(raf);
+  stopBgm();
 
-    queue = shuffle(vocab).slice(0, 5);
+  $('typing-start').hidden = true;
+  stage.hidden = false;
+  input.disabled = false;
+
+  queue = shuffle(vocab).slice(0, 5);
     index = 0;
     hp = 3;
     score = 0;
@@ -3295,41 +3365,35 @@ const playerRect = {
     lastTime = performance.now();
     raf = requestAnimationFrame(frame);
 
-    input.focus({ preventScroll: true });
   }
 
   /* ---------- ゲームを開く・閉じる ---------- */
 
-  window.openTypingSecretGame = function() {
-    game.hidden = false;
-    result.hidden = true;
-    updateLanguage();
-
-    if (location.hash !== '#typing-game') {
-      history.replaceState(null, '', '#typing-game');
-    }
-
-    game.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    startTypingGame();
-  };
 
   window.closeTypingSecretGame = function() {
-    running = false;
-    cancelAnimationFrame(raf);
-    stopBgm();
-    enemy.hidden = true;
-    result.hidden = true;
-    game.hidden = true;
+  location.hash = 'top';
+};
 
-    if (location.hash === '#typing-game') {
-      history.replaceState(null, '', location.pathname + location.search);
-    }
+window.startTypingGame = startTypingGame;
+window.submitTypingAnswer = submitAnswer;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+// ゲーム画面を離れたときに停止
+window.stopTypingGame = function() {
+  running = false;
+  cancelAnimationFrame(raf);
+  stopBgm();
+  enemy.hidden = true;
+  result.hidden = true;
 
-  window.startTypingGame = startTypingGame;
-  window.submitTypingAnswer = submitAnswer;
+  stage.hidden = true;
+  $('typing-start').hidden = false;
+  input.disabled = true;
+};
+
+// タイピングゲームを開く
+window.openTypingSecretGame = function() {
+  location.hash = 'typing-game';
+};
 
   /* ---------- 解放演出 ---------- */
 
