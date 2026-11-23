@@ -905,6 +905,22 @@ h1 {
 .typing-hud {display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;margin:8px 0}
 .typing-hud b {color:#ffd23f}
 .typing-controls {max-width:520px;margin:10px auto;text-align:center}
+.typing-meaning {
+  max-width: 520px;
+  margin: 8px auto;
+  padding: 8px 12px;
+  color: #ffd23f;
+  background: rgba(18,10,42,.88);
+  border: 1px solid #c9a8ff;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.typing-meaning[hidden] {
+  display: none !important;
+}
+ 
 .typing-input-row {display:flex;gap:8px;align-items:stretch}
 #typing-answer {
   flex:1;min-width:0;padding:10px 12px;font:inherit;font-size:20px;
@@ -2981,6 +2997,8 @@ const playerRect = {
     </div>
   </div>
 
+  <p id="typing-meaning" class="typing-meaning" hidden></p>
+    
   <div class="typing-controls">
     <p id="typing-question">準備中...</p>
     <p id="typing-current-word" class="typing-current-word"></p>
@@ -3281,7 +3299,7 @@ const playerRect = {
     resolveCorrectAnswer();
   }
 
-  // 正解時の共通処理
+   // 正解時の共通処理
   function resolveCorrectAnswer() {
     if (!running || answering) return;
 
@@ -3297,6 +3315,18 @@ const playerRect = {
 
     $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
 
+    // 正解後に意味を表示
+    const meaning = isKorean()
+      ? current.jaQuestion
+      : current.koQuestion;
+
+    const meaningEl = $('typing-meaning');
+    meaningEl.textContent = isKorean()
+      ? `뜻：${meaning || '등록되지 않음'}`
+      : `意味：${meaning || '登録なし'}`;
+
+    meaningEl.hidden = false;
+
     const panel = $('typing-choice-panel');
     if (panel) panel.hidden = true;
 
@@ -3310,7 +3340,7 @@ const playerRect = {
           raf = requestAnimationFrame(frame);
         }
       }
-    }, 650);
+        }, 1200);
   }
 
   function toHiragana(value) {
@@ -3472,9 +3502,13 @@ const playerRect = {
       ? '떨어지는 글자의 발음을 입력해 적을 물리치세요!'
       : '落ちてくる文字の読みを入力して、敵をたおそう！';
 
+        const choiceMode = isJapaneseMobileChoiceMode();
+
     $('typing-question').textContent = ko
       ? '일본어 발음을 한글로 입력하세요!'
-      : '落ちてくる韓国語の読みを入力してね！';
+      : choiceMode
+        ? '落ちてくる言葉のよみを選んでね！'
+        : '落ちてくる韓国語の読みを入力してね！';
 
     input.placeholder = ko
       ? '한글로 입력'
@@ -3494,7 +3528,6 @@ const playerRect = {
         updateHud();
 
     // 言語切り替え時に回答方式も更新
-    const choiceMode = isJapaneseMobileChoiceMode();
 
     game.classList.toggle('ja-mobile-choice', choiceMode);
     input.disabled = choiceMode;
@@ -3533,6 +3566,7 @@ const playerRect = {
 
   answering = false;
   current = queue[index];
+   $('typing-meaning').hidden = true;   
 
   const shownWord = isKorean()
     ? current.koQuestion
