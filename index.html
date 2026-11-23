@@ -3318,8 +3318,8 @@ const playerRect = {
 
     // 正解後に意味を表示
     const meaning = isKorean()
-  ? current.jaQuestion
-  : current.koMeaning || current.koQuestion;
+  ? (current.koMeaning || current.jaQuestion)
+  : current.koQuestion;
 
     const meaningEl = $('typing-meaning');
     meaningEl.textContent = isKorean()
