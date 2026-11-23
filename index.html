@@ -877,11 +877,7 @@ h1 {
 .typing-explode {animation:typing-explode .35s steps(3) forwards}
 @keyframes typing-hurt {50%{filter:brightness(2) sepia(1) hue-rotate(300deg)}}
 @keyframes typing-explode {to{opacity:0;transform:translateX(-50%) scale(1.8) rotate(20deg)}}
-@media(max-width:480px) {
- #typing-stage{height:52vh;min-height:300px}
- .typing-input-row{gap:4px}
- #typing-submit{margin:0;padding:6px 10px}
-}
+
 
 #typing-secret-entry[hidden]{display:none !important;}
 
@@ -1019,8 +1015,13 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   }
 
   .typing-input-row {
-    gap: 6px;
-  }
+  gap: 6px;
+}
+
+#typing-submit {
+  margin: 0;
+  padding: 6px 10px;
+}
 }
 
 #typing-start {
