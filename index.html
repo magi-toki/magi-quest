@@ -776,7 +776,7 @@ h1 {
 
  <div class="win" id="stw">
   <div class="row">
-   <div><i data-s="crow" data-z="4"></i></div>
+   <div><i data-s="toki" data-z="3"></i></div>
    <div class="st">
     <div class="nm">KIM TOKI</div>
     <div class="y">THE GORGEOUS BIRTHDAY BOY</div>
@@ -1075,7 +1075,127 @@ KYYYYYYYYYK
 .KKKKKKKKK.`
 };
 
+const TOKI_PAL={
+ '0':'#1a0f2e',
+ 'A':'#ffffff',
+ 'B':'#fffffa',
+ 'C':'#f9ece9',
+ 'D':'#e0d7dc',
+ 'E':'#c5b0cb',
+ 'F':'#ad83b1',
+ 'G':'#997fad',
+ 'H':'#b16caa',
+ 'I':'#b665a7',
+ 'J':'#a575ae',
+ 'K':'#a86fab',
+ 'L':'#9e7ab1',
+ 'M':'#977bb9',
+ 'N':'#9a73a7',
+ 'O':'#c15aa1',
+ 'P':'#c7549f',
+ 'Q':'#ba5da1',
+ 'R':'#a65b96',
+ 'S':'#d54b8b',
+ 'T':'#b44c94',
+ 'U':'#8976d4',
+ 'V':'#8d759e',
+ 'W':'#8668a2',
+ 'X':'#5868ff',
+ 'Y':'#6f6bcd',
+ 'Z':'#585ee7',
+ 'a':'#7a549d',
+ 'b':'#63519d',
+ 'c':'#4752e9',
+ 'd':'#583f6e',
+ 'e':'#504167',
+ 'f':'#473f7c',
+ 'p':'#4b2f9a',
+ 'q':'#9a7be8',
+ 'r':'#5f8bff',
+ 's':'#ffffff',
+ 't':'#f08ac0'
+};
+
+SP.toki=`
+......................000000..................................
+....................00VRRTRR00................................
+...................0RTPPPPPPPT00..............................
+.................00RPPPPPPPPPPPR0.............................
+................0aTPPPPPPPPPPPPPR0............................
+...............0VPPPPPPPPPPPPPPPTV0...........................
+...............0TPPPPPPPPPPPPPPPPR0...........................
+..............0TPPPPTRRaRRRTPPPPPT0...........................
+..............0PPPRF00000000RTPPPT0...........................
+.............0TPTR00........00RPPP0...........................
+.............0TPV0............0RPT0...........................
+............0RPR0.......00000000RT000000000...................
+............0TR0.....000RRTTTTTTTRTTTTTTTRR000................
+............0R0....00RTPPPPPPPPPPPPPPPPPPPTTTR00..............
+.............0...00RTPPPPPPPPPPPPPPPPPPPPTTTTTTR00............
+................0RTPPPPPPPPPPPPPPPPPPPPPPPTTPPOOTR0...........
+...............0RPPPPPPPPPPPPPPPPTTPPPPOOOPTTOOOOQR0..........
+..............0RPPPPPPPPPPPPPPPOOTPOOOOOOOOOTTOOOOQQ0.........
+.............0RPPPPPTPOOOOOOOORTTOTTRQOOOOOOOQTQQQQQQ0........
+............0RPPOOOPOOOOOOOOOTTTTTTTTTQQTQQQQQQTQQIIIR0.......
+...........0ROOOOOOOOOOOOQQQQTTQQQQQTTQQQTQIIIIIQIIIIIR0......
+...........0QOOOQQQQQQQQQTQQTTQIIIIIIRRIIQQIIIIIIIIIIHHV0.....
+..........0RQQQQQQQQQQIIRIIIRQIIIIIIIIaIIIRIIIIHHHHHHHKN0.....
+..........0QQQQIIIIIQIIQQIIIRIIIIIIIIHRRHHHRHHKHHHHKKKEDV0....
+.........0EIIIIIIIIQIIIRHHHRRHHHHHHHHHRRHHHKHKKRKKKKKJEAD0....
+........0FADIIIIIIRRHHHHHHHRRHHHHHKKKKKaKKKKKKKKRKKFEJJEAV0...
+.......0WDAHHHFHHKRHHHKHKKKRKKKKKKKKKJKaJJJJKJJJWWJCAEJLEN0...
+.......0FAERHEACKaKKKKKKKKKRKJJJJJJJNJJWJJJJJNJFEaWFABJWLLV0..
+......0VFERRKDAERKKKKKKJJJJKJJJJJJJJVJJNJJFFJNLDAEaNEAFLaLN0..
+......0NKKaJJCCNKJEJJNJFDEJJJJJJJEEJNFDFLLAAFNNFAALWLFLLaNLV0.
+.....0VJJWWJJEFNJFEJNNJEADLNLLDEDEDLVFAENLDAELWLCCLNNLLLLdLV0.
+.....0VLJdJJJJVJJJJJWNLDAENNLLEEDEDLNFAEVLECFLWLFLLLVLLLLdNV0.
+.....0NLWaLLLNNLLLLLWLLFDFVLLLLLLLLNLLFLVLLLLLWLLLLLLVLLLWaL0.
+....0VLLbNLLLVLLLLLLaLLLLLVLLLLLLLLVLLLLVLLLLLWNLLLLLVLLLLdLV0
+....0GLLdLLLNVLLLLLWWLLLLNVGLLLLLLLVLLLLVLLGLGWWLLLLLGVLLLdNV0
+....0VLNdLLLWLLLLLLWWNVVWWFWVNLLLLNNLNVV00WVVVWaLLLLLLWLLLaaV0
+....0GLWdLLLWLLLLLLaaGLLLVDFLNLLLLVLLVGVCVGLLNWaLLLLLLVNLLadG0
+....0VLaaLLNVLLLLLLaWLLLGECELLVLLLVLGNLFCEELLLNaLLLLLLNNLLWdV0
+....0VLbaMLWVMMMMWMWWMMGCEADVMVLMWGLVLGEBCCGLLNaLNLLLLLaLLNeV0
+....0VVdWMMWNMMMMaMWWMMEBDDDFMMWMWMVGMVDDDDDMLNaMWLLLLLaLLNeW0
+....0VWdWMMaWMMMMaMa0MVDDDDDDWMMWMVVMVEDDDDCFMW0MaMMMMLaLLLeG0
+.....0WbWUUaMUUUUbWb00000000DFMMWMaMMVDD0000000bWbMMMMMaLLLGV0
+.....0bbYUUYUUUUUY0000pppp0EEEFWMWWWGFE00pppp0000aMMMMMaMMGDG0
+.....00bbUUYYUUUUUbYEpqqqqp0FDDWYUUaEDE0pqqqqpDWbUUUMMMaMMFDV0
+.....0fbbYUZbYUUUUYYFpqsqrpaaCFYUUUUVCFRpqsqrpDYbUUUUWMaWMCD0.
+.....0ffcYXXYXZXUUUbbpqqrrpEMDVUUYUUYEEEpqqrrpMfYUUUUYaaWGAE0.
+.....0cfcXZXZZZXXXXZbptrrtpEMEYEDBEYYVFEptrrtpfbUUUUYYbaWWEG0.
+....0bcccXXZXZZXXXXXc0ppppUEDCBABBBDECDEUpppp0cXUUUUbYbbWWWa0.
+....0cXccXXXXZccXXXXXcSEEIECAAAACCCABBABDFSESbZXXUZYbbbYMWaW0.
+..00ccYZXXXXZXccXXXXXXcSSSCAAAAAABAAAAAAAESSbZXXXcYbbbbYYaaa0.
+.00fb0YXXXXY0ZXcccXXXXXc0DAAAAAAAAAAAAAAAC0cXXXZcZbbbYYbWbbad0
+..00bZXXXb00.0XccXcccEEECAAAAABCCEDBCAAAAABDEEYcbdbbYbYabbaad0
+..0VfbW000...0ZXXXXXcXEAAAAAAAABSSSDAAAAAAAADZcccfcZYYbbbbaa0.
+...0000.......0XXXXXXXXECAAAAAAACSEAAAAAAABCcccccdZZYYYaaaaa0.
+..............0XXcXXXXXUADCAAAAAAAAAAAAACDBAcccccSaZYYYaaab0..
+..............0XXcXXXXXXAAADCBAAAAAAABCDAAACcccccSSWYYYaaa0...
+..............0XXYXXXXXXEAAAABCDCBCCDAAAAAADXXXccSSS00WW00....
+..............0cZbXXXXXcXAAAAAAFEEEEDAAAAAAUXXXcZSSSR000......
+..............0X00XXXXXcXUAAAAAedLaeEAAAAAAXXXXcUDSSS00.......
+.............0Vb0VXXXXXcXXEAAAFeeVdeaBAAAADXcXccYCSRSSS0......
+............00V0eVXXXXXXbcXY00eeeadeeedVVGXcXXccYVSSSSSS0.....
+...........0F00deecXXXXXXefcb0eeeeeeeeeeefXcXXcccddS0SS0......
+............0.0eeefXXXXXXceeeeeeeeeeeeeeecXcXXXcceeS000.......
+..............0eeeecXXXXXXcfeeeeeeeeeeeefXVXXXceceeSS0........
+..............0eeeefXXXcXXXcbeeee00eeeeecN0XXXceffedS0........
+..............0eeeeebccfefbNeeeeeeeeeeebWdbXXXcee0eeSS0.......
+..............0eeeeeefccfeeVLeeeeeeeee0VeeccXXceeeee0SS0......
+..............0Vdeeeeeeeeeee00eeeee0000eefX0XXbeeedVVR0.......
+..............0VGLaeeeeeeeeWdeeeeeeeeedWebefXXeedNLV00........
+...............00VNNNadeee00eeeeeeeeeee000ebXc0NNV00..........
+.................000VVVVaWV0eaVVE0000V00VWVcXbV000............
+....................0000000000000....00000bXc00...............
+........................................00XX0.................
+.......................................0EbZ0..................
+........................................000...................`;
+
+
 function px(n,z){
+ const pal=n==='toki'?TOKI_PAL:PAL;
  const r=SP[n].trim().split('\n'),c=document.createElement('canvas');
  c.width=r[0].length;
  c.height=r.length;
@@ -1084,12 +1204,18 @@ function px(n,z){
  const g=c.getContext('2d');
 
  r.forEach((l,y)=>[...l].forEach((ch,x)=>{
-  if(PAL[ch]){
-   g.fillStyle=PAL[ch];
+  if(pal[ch]){
+   g.fillStyle=pal[ch];
    g.fillRect(x,y,1,1);
   }
  }));
 
+ c.style.width=c.width*z+'px';
+ c.style.height=c.height*z+'px';
+ c.setAttribute('aria-hidden','true');
+
+ return c;
+}
  c.style.width=c.width*z+'px';
  c.style.height=c.height*z+'px';
  c.setAttribute('aria-hidden','true');
