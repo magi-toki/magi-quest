@@ -703,12 +703,6 @@ h1 {
   display:none;
 }
 
-@media(max-width:480px) {
-  #game-stage {
-    height:48vh;
-    min-height:260px;
-    max-height:380px;
-  }
 }
 
 /* ===== MAGI PARFAIT DASH：落下アイテム ===== */
@@ -963,11 +957,11 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 
 @media (max-width: 480px) {
   #typing-stage {
-    height: 44vh;
-    min-height: 270px;
-    max-height: 340px;
-    margin: 8px auto;
-  }
+  height: 55vh;
+  min-height: 320px;
+  max-height: 460px;
+  margin: 8px auto;
+}
 
   #typing-player {
     width: 52px;
@@ -2989,7 +2983,8 @@ const playerRect = {
   let clickCount = 0;
   let unlocked = false;
   let running = false;
-  let composing = false;
+　let answering = false;
+　let composing = false;
   let hp = 3;
   let score = 0;
   let index = 0;
@@ -3006,24 +3001,97 @@ const playerRect = {
   : 48;
 
   const vocab = [
-    { ko:'마기', ja:'まぎ', answer:'마기' },
-    { ko:'토키', ja:'とき', answer:'토키' },
-    { ko:'방송', ja:'ばんそん', answer:'방송', jaAlt:['ばんそん'] },
-    { ko:'감자', ja:'かむじゃ', answer:'감자' },
-    { ko:'파르페', ja:'ぱるぺ', answer:'파르페' },
-    { ko:'딸기', ja:'たるぎ', answer:'딸기' },
-    { ko:'오늘', ja:'おぬる', answer:'오늘' },
-    { ko:'내일', ja:'ねいる', answer:'내일' },
-    { ko:'안녕', ja:'あんにょん', answer:'안녕' },
-    { ko:'좋아', ja:'ちょあ', answer:'좋아' },
-    { ko:'김 씨', ja:'きむっし', answer:'김 씨', jaAlt:['きむし'] },
-    { ko:'남궁혁', ja:'なむぐんひょく', answer:'남궁혁' },
-    { ko:'서애덕', ja:'そえどく', answer:'서애덕' },
-    { ko:'월요일', ja:'うぉりょいる', answer:'월요일' },
-    { ko:'똥겜', ja:'とんげむ', answer:'똥겜' },
-    { ko:'아름다운 남자', ja:'あるむだうん なむじゃ', answer:'아름다운 남자' },
-    { ko:'여행', ja:'よへん', answer:'여행' }
-  ];
+  {
+    jaQuestion: '방송',
+    jaAnswers: ['ばんそん', 'ぱんそん'],
+    koQuestion: 'はいしん',
+    koAnswers: ['하이신']
+  },
+  {
+    jaQuestion: '감자',
+    jaAnswers: ['かむじゃ'],
+    koQuestion: 'じゃがいも',
+    koAnswers: ['쟈가이모']
+  },
+  {
+    jaQuestion: '파르페',
+    jaAnswers: ['ぱるぺ'],
+    koQuestion: 'ぱふぇ',
+    koAnswers: ['파페']
+  },
+  {
+    jaQuestion: '딸기',
+    jaAnswers: ['たるぎ'],
+    koQuestion: 'いちご',
+    koAnswers: ['이치고']
+  },
+  {
+    jaQuestion: '오늘',
+    jaAnswers: ['おぬる'],
+    koQuestion: 'きょう',
+    koAnswers: ['쿄오']
+  },
+  {
+    jaQuestion: '내일',
+    jaAnswers: ['ねいる'],
+    koQuestion: 'あした',
+    koAnswers: ['아시타']
+  },
+  {
+    jaQuestion: '안녕',
+    jaAnswers: ['あんにょん'],
+    koQuestion: 'こんにちは',
+    koAnswers: ['콘니치와']
+  },
+  {
+    jaQuestion: '좋아',
+    jaAnswers: ['ちょあ'],
+    koQuestion: 'いいぞ',
+    koAnswers: ['이이조']
+  },
+  {
+    jaQuestion: '김 씨',
+    jaAnswers: ['きむし', 'きむっし'],
+    koQuestion: 'きむさん',
+    koAnswers: ['키무상']
+  },
+  {
+    jaQuestion: '남궁혁',
+    jaAnswers: ['なむぐんひょく'],
+    koQuestion: 'ぐんひょく',
+    koAnswers: ['군혁']
+  },
+  {
+    jaQuestion: '서애덕',
+    jaAnswers: ['そえどく'],
+    koQuestion: 'えどく',
+    koAnswers: ['애덕']
+  },
+  {
+    jaQuestion: '월요일',
+    jaAnswers: ['うぉりょいる'],
+    koQuestion: 'げつようび',
+    koAnswers: ['게츠요오비']
+  },
+  {
+    jaQuestion: null,
+    jaAnswers: [],
+    koQuestion: 'くそげえむ',
+    koAnswers: ['쿠소게에무']
+  },
+  {
+    jaQuestion: '아름다운 남자',
+    jaAnswers: ['あるむだうんなむじゃ', 'あるむだうん なむじゃ'],
+    koQuestion: 'うつくしい おとこ',
+    koAnswers: ['우츠쿠시이 오토코', '우츠쿠시이오토코']
+  },
+  {
+    jaQuestion: '여행',
+    jaAnswers: ['よへん'],
+    koQuestion: 'りょこう',
+    koAnswers: ['료코오']
+  }
+];
 
   function language() {
     return typeof lang !== 'undefined' && lang === 'ko' ? 'ko' : 'ja';
@@ -3221,8 +3289,12 @@ const playerRect = {
     });
 
     updateHud();
-    if (current) {
-  const shownWord = isKorean() ? current.ja : current.ko;
+    
+  if (current) {
+  const shownWord = isKorean()
+    ? current.koQuestion
+    : current.jaQuestion;
+
   wordEl.textContent = shownWord;
   $('typing-current-word').textContent = shownWord;
   wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
@@ -3240,83 +3312,96 @@ const playerRect = {
   /* ---------- 敵の生成 ---------- */
 
   function makeEnemy() {
-    if (!running) return;
+  if (!running) return;
 
-    if (index >= 5) {
-      finishGame(true);
-      return;
-    }
+  answering = false;
+  current = queue[index];
 
-    current = queue[index];
+  const shownWord = isKorean()
+    ? current.koQuestion
+    : current.jaQuestion;
 
-    const shownWord = isKorean() ? current.ja : current.ko;
-    wordEl.textContent = shownWord;
-    $('typing-current-word').textContent = shownWord;
-    wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
+  wordEl.textContent = shownWord;
+  $('typing-current-word').textContent = shownWord;
+  wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
 
-    const iconBox = enemy.querySelector('.typing-enemy-icon');
-    iconBox.replaceChildren();
+  const iconBox = enemy.querySelector('.typing-enemy-icon');
+  iconBox.replaceChildren();
 
-    if (Math.random() < 0.5) {
-      const x = document.createElement('div');
-      x.className = 'typing-x';
-      x.textContent = 'X';
-      iconBox.appendChild(x);
-    } else {
-      const yt = document.createElement('div');
-      yt.className = 'typing-youtube';
-      const spinner = document.createElement('span');
-      spinner.className = 'typing-spinner';
-      yt.appendChild(spinner);
-      iconBox.appendChild(yt);
-    }
-
-    enemy.style.left = '50%';
-    enemyY = 42;
-    enemy.style.top = enemyY + 'px';
-    enemy.classList.remove('typing-explode');
-    enemy.hidden = false;
-
-    input.value = '';
-    $('typing-feedback').textContent = '';
-    updateHud();
+  if (Math.random() < 0.5) {
+    const x = document.createElement('div');
+    x.className = 'typing-x';
+    x.textContent = 'X';
+    iconBox.appendChild(x);
+  } else {
+    const yt = document.createElement('div');
+    yt.className = 'typing-youtube';
+    const spinner = document.createElement('span');
+    spinner.className = 'typing-spinner';
+    yt.appendChild(spinner);
+    iconBox.appendChild(yt);
   }
 
+  enemy.style.left = '50%';
+  enemyY = 42;
+  enemy.style.top = enemyY + 'px';
+  enemy.classList.remove('typing-explode');
+  enemy.hidden = false;
+
+  input.value = '';
+  $('typing-feedback').textContent = '';
+  updateHud();
+}
+   
   /* ---------- 問題の判定 ---------- */
 
-  function submitAnswer() {
-    if (!running || composing || !current) return;
+ function submitAnswer() {
+  if (!running || answering) return;
 
-    const raw = input.value.trim().normalize('NFC');
-    if (!raw) return;
+  const raw = $('typing-answer').value.trim();
+  if (!raw) return;
 
-    const answer = isKorean() ? raw : toHiragana(raw);
+  const answer = isKorean()
+    ? raw.replace(/\s+/g, '')
+    : toHiragana(raw).replace(/\s+/g, '');
 
-    const accepted = isKorean()
-      ? [current.answer]
-      : [current.ja, ...(current.jaAlt || [])];
+  const accepted = isKorean()
+    ? current.koAnswers
+    : current.jaAnswers;
 
-    const normalized = accepted.map(value => value.normalize('NFC'));
+  const isCorrect = accepted.some(
+    item => item.replace(/\s+/g, '') === answer
+  );
 
-    if (normalized.includes(answer)) {
-      score += 100;
-      updateHud();
-      soundEffect('hit');
-
-      enemy.classList.add('typing-explode');
-      $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
-
-      setTimeout(() => {
-        if (running) nextQuestion();
-      }, 300);
-    } else {
-      soundEffect('miss');
-      $('typing-feedback').textContent = isKorean()
-        ? '아니에요! 다시 입력!'
-        : 'ちがう！もう一度！';
-      input.select();
-    }
+  if (!isCorrect) {
+    $('typing-feedback').textContent = isKorean()
+      ? '다시 도전!'
+      : 'もう一度！';
+    return;
   }
+
+    answering = true;
+  cancelAnimationFrame(raf);
+
+  score += 100;
+  updateHud();
+
+  enemy.classList.add('typing-explode');
+   
+  $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
+
+  setTimeout(() => {
+    if (running) {
+      nextQuestion();
+
+      if (running) {
+        answering = false;
+        lastTime = performance.now();
+        raf = requestAnimationFrame(frame);
+      }
+    }
+  }, 650);
+}
 
   /* ---------- 次の問題 ---------- */
 
@@ -3412,7 +3497,13 @@ const playerRect = {
   stage.hidden = false;
   input.disabled = false;
 
-  queue = shuffle(vocab).slice(0, 5);
+  queue = shuffle(
+  vocab.filter(item =>
+    isKorean()
+      ? Boolean(item.koQuestion)
+      : Boolean(item.jaQuestion)
+  )
+).slice(0, 5);
     index = 0;
     hp = 3;
     score = 0;
