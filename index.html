@@ -2269,7 +2269,7 @@ document.querySelectorAll('.view').forEach(s=>{
   s.hidden=s.id!==viewId;
 });
 
- $('nav').hidden=v==='top'||v==='secret'||v==='ending';
+ $('nav').hidden=v==='top'||v==='secret'||v==='ending'||v==='typing-game';
 
  window.scrollTo(0,0);
 
@@ -3385,11 +3385,13 @@ const playerRect = {
     answering = true;
   cancelAnimationFrame(raf);
 
-  score += 100;
+    score += 100;
   updateHud();
 
+  soundEffect('hit');
+
   enemy.classList.add('typing-explode');
-   
+
   $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
 
   setTimeout(() => {
