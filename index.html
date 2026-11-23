@@ -3626,12 +3626,13 @@ const playerRect = {
 
   /* ---------- ゲーム終了 ---------- */
 
+  function finishGame(completed) {
     running = false;
-  cancelAnimationFrame(raf);
-  stopBgm();
-  enemy.hidden = true;
-  $('typing-choice-panel').hidden = true;
-  result.hidden = false;
+    cancelAnimationFrame(raf);
+    stopBgm();
+    enemy.hidden = true;
+    $('typing-choice-panel').hidden = true;
+    result.hidden = false;
 
     soundEffect(completed ? 'clear' : 'over');
 
