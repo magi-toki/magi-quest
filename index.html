@@ -963,11 +963,38 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 
 @media (max-width: 480px) {
   #typing-stage {
-  height: 55vh;
-  min-height: 320px;
-  max-height: 460px;
-  margin: 8px auto;
-}
+    height: 55vh;
+    min-height: 320px;
+    max-height: 460px;
+    margin: 8px auto;
+  }
+
+  /* ゲーム開始後は上部のタイトル・説明・STARTを隠す */
+  #v-typing-game.typing-playing > .win > h2,
+  #v-typing-game.typing-playing #typing-description,
+  #v-typing-game.typing-playing #typing-start {
+    display: none !important;
+  }
+
+  /* HP・SCORE・QUESTを一列にまとめる */
+  .typing-hud {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    margin: 4px 0;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .typing-hud span {
+    font-size: 12px;
+  }
+
+  .typing-hud b {
+    font-size: 12px;
+  }
 
   #typing-player {
     width: 52px;
@@ -1015,13 +1042,13 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   }
 
   .typing-input-row {
-  gap: 6px;
-}
+    gap: 6px;
+  }
 
-#typing-submit {
-  margin: 0;
-  padding: 6px 10px;
-}
+  #typing-submit {
+    margin: 0;
+    padding: 6px 10px;
+  }
 }
 
 #typing-start {
@@ -3497,11 +3524,12 @@ const playerRect = {
 
   /* ---------- ゲーム開始 ---------- */
 
-  function startTypingGame() {
+    function startTypingGame() {
   cancelAnimationFrame(raf);
   stopBgm();
 
   $('typing-start').hidden = true;
+  game.classList.add('typing-playing');
   stage.hidden = false;
   input.disabled = false;
 
@@ -3553,6 +3581,7 @@ window.stopTypingGame = function() {
 
   stage.hidden = true;
   $('typing-start').hidden = false;
+  game.classList.remove('typing-playing');
   input.disabled = true;
 };
 
