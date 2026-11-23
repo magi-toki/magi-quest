@@ -707,20 +707,13 @@ h1 {
 
 /* ===== MAGI PARFAIT DASH：落下アイテム ===== */
 .game-fall {
-  .game-fall {
   position:absolute;
   top:-50px;
-  width:40px;
-  height:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-sizing:border-box;
+  display:block;
   animation:game-fall linear forwards;
   pointer-events:none;
   z-index:2;
 }
-
 @keyframes game-fall {
   from {
     transform:translateY(0) rotate(0deg);
