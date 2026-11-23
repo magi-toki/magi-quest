@@ -707,14 +707,18 @@ h1 {
 
 /* ===== MAGI PARFAIT DASH：落下アイテム ===== */
 .game-fall {
+  .game-fall {
   position:absolute;
   top:-50px;
-  display:block;
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
   animation:game-fall linear forwards;
   pointer-events:none;
   z-index:2;
-  width:auto;
-  max-width:max-content;
 }
 
 @keyframes game-fall {
@@ -2696,8 +2700,8 @@ if (type < 0.20) {
   item.dataset.type = 'poop';
 }
 
-    const maxX = Math.max(0, stage.clientWidth - 45);
-    item.style.left = Math.random() * maxX + 'px';
+    const maxX = Math.max(0, stage.clientWidth - 40);
+item.style.left = Math.random() * maxX + 'px';
     item.style.animationDuration = ((3 + Math.random() * 2) / fallSpeed) + 's';
 
     item.addEventListener('animationend', () => item.remove());
