@@ -3676,6 +3676,45 @@ window.openTypingSecretGame = function() {
     composing = false;
   });
 
+  
+  // ===== スマホ版：キーボード表示時のスクロール制御 =====
+  const typingMobileQuery = window.matchMedia('(max-width: 480px)');
+  let typingSavedScrollY = 0;
+  let typingMobileFocus = false;
+
+  function restoreTypingScroll() {
+    if (!typingMobileFocus || document.activeElement !== input) return;
+    window.scrollTo(0, typingSavedScrollY);
+  }
+
+  // 入力欄をタップしたときのスクロール位置を保存
+  input.addEventListener('focus', () => {
+    if (!typingMobileQuery.matches) return;
+
+    typingSavedScrollY = window.scrollY;
+    typingMobileFocus = true;
+
+    // ブラウザの自動スクロール後に元の位置へ戻す
+    requestAnimationFrame(() => {
+      requestAnimationFrame(restoreTypingScroll);
+    });
+  });
+
+  // 入力欄から離れたら制御を解除
+  input.addEventListener('blur', () => {
+    typingMobileFocus = false;
+  });
+
+  // キーボード表示による画面サイズ変更にも対応
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => {
+      if (!typingMobileQuery.matches) return;
+      requestAnimationFrame(restoreTypingScroll);
+    });
+  }
+  // ===== スマホ版スクロール制御ここまで =====
+
+
   input.addEventListener('keydown', event => {
     if (event.key === 'Enter' && !event.isComposing) {
       event.preventDefault();
