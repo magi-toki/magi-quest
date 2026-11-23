@@ -1216,13 +1216,6 @@ function px(n,z){
 
  return c;
 }
- c.style.width=c.width*z+'px';
- c.style.height=c.height*z+'px';
- c.setAttribute('aria-hidden','true');
-
- return c;
-}
-
 function hy(root){
  root.querySelectorAll('[data-s]').forEach(e=>{
   e.replaceWith(px(e.dataset.s,+e.dataset.z||4));
