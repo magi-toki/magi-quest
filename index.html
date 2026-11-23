@@ -3183,11 +3183,12 @@ const playerRect = {
     koAnswers: ['게츠요오비']
   },
   {
-    jaQuestion: null,
-    jaAnswers: [],
-    koQuestion: 'くそげえむ',
-    koAnswers: ['쿠소게에무']
-  },
+  jaQuestion: null,
+  jaAnswers: [],
+  koQuestion: 'くそげえむ',
+  koAnswers: ['쿠소게에무'],
+  koMeaning: '똥겜'
+},
   {
     jaQuestion: '아름다운 남자',
     jaAnswers: ['あるむだうんなむじゃ', 'あるむだうん なむじゃ'],
@@ -3317,8 +3318,8 @@ const playerRect = {
 
     // 正解後に意味を表示
     const meaning = isKorean()
-      ? current.jaQuestion
-      : current.koQuestion;
+  ? current.jaQuestion
+  : current.koMeaning || current.koQuestion;
 
     const meaningEl = $('typing-meaning');
     meaningEl.textContent = isKorean()
