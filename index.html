@@ -180,6 +180,7 @@ h1 {
   letter-spacing:.2em;
 }
 
+  
 .row {
   display:flex;
   flex-wrap:wrap;
@@ -966,15 +967,41 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 
 @media (max-width: 480px) {
   #typing-stage {
-    height: 34vh;
-    min-height: 190px;
-    max-height: 250px;
+    height: 44vh;
+    min-height: 270px;
+    max-height: 340px;
     margin: 8px auto;
   }
 
   #typing-player {
-    width: 58px;
-    height: 58px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .typing-enemy {
+    width: 130px;
+  }
+
+  .typing-enemy-icon {
+    width: 82px;
+    height: 66px;
+  }
+
+  .typing-x {
+    width: 60px;
+    height: 60px;
+    font-size: 54px;
+  }
+
+  .typing-youtube {
+    width: 76px;
+    height: 52px;
+  }
+
+  .typing-youtube:before {
+    border-top-width: 12px;
+    border-bottom-width: 12px;
+    border-left-width: 20px;
   }
 
   .typing-controls {
@@ -995,6 +1022,32 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
     gap: 6px;
   }
 }
+
+#typing-start {
+  display: block;
+  min-width: 220px;
+  margin: 36px auto;
+  padding: 18px 48px;
+  font-size: clamp(26px, 6vw, 36px);
+  color: #120a2a;
+  background: #ffd23f;
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 8px #7a55d6,
+    0 0 24px #ffd23f;
+  cursor: pointer;
+}
+
+#typing-start:hover,
+#typing-start:focus-visible {
+  background: #fff0a8;
+  transform: scale(1.05);
+}
+
+#typing-start[hidden] {
+  display: none !important;
+}
+
 
   
   
@@ -1154,9 +1207,6 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 </section>
 </main>
 
-<footer class="site-footer">
- 기획·제작　다윤 & nico
-</footer>
 
 <div class="mo" id="mo" role="dialog" aria-modal="true">
  <div class="win">
@@ -2162,6 +2212,9 @@ function setLang(l){
 
  closeW();
  applyLang();
+if (typeof window.updateMagiTypingLanguage === 'function') {
+  window.updateMagiTypingLanguage();
+}
  grid();
 
  if(!$('v-messages').hidden){
@@ -2909,7 +2962,12 @@ const playerRect = {
 </div>
 <!-- ===== END MAGI WORD BLASTER GAME ===== -->
 
+<footer class="site-footer">
+ 기획·제작　다윤 & nico
+</footer>
+
 <script>
+
 /* ===== MAGI WORD BLASTER : GAME SYSTEM ===== */
 (() => {
   const $ = id => document.getElementById(id);
@@ -2942,7 +3000,9 @@ const playerRect = {
   let bgmTimer = null;
   let audioContext = null;
 
-  const speed = 48;
+  const speed = window.matchMedia('(max-width: 480px)').matches
+  ? 24
+  : 48;
 
   const vocab = [
     { ko:'마기', ja:'まぎ', answer:'마기' },
@@ -3160,6 +3220,12 @@ const playerRect = {
     });
 
     updateHud();
+    if (current) {
+  const shownWord = isKorean() ? current.ja : current.ko;
+  wordEl.textContent = shownWord;
+  $('typing-current-word').textContent = shownWord;
+  wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
+}
   }
 
   /* ---------- HUD ---------- */
