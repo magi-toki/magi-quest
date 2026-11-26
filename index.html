@@ -2274,16 +2274,37 @@ function allMessagesRead(){
  return MSGS.length>0&&MSGS.every((m,index)=>readMessages.has(String(index)));
 }
 
-function maybeShowEnding(){
- const complete=allWorksViewed()&&allMessagesRead();
+/* ===== エンディング解放判定 ===== */
 
- const galleryPrompt=$('ending-prompt-gallery');
- const messagesPrompt=$('ending-prompt-messages');
+const TYPING_GAME_CLEAR_KEY = 'mq-typing-game-cleared';
 
- if(galleryPrompt)galleryPrompt.hidden=!complete;
- if(messagesPrompt)messagesPrompt.hidden=!complete;
+function isTypingGameCleared(){
+ try{
+  return localStorage.getItem(TYPING_GAME_CLEAR_KEY) === '1';
+ }catch(e){
+  return false;
+ }
 }
 
+function maybeShowEnding(){
+
+ const complete =
+  allWorksViewed() &&
+  allMessagesRead() &&
+  isTypingGameCleared();
+
+ const galleryPrompt = $('ending-prompt-gallery');
+ const messagesPrompt = $('ending-prompt-messages');
+
+ if(galleryPrompt){
+  galleryPrompt.hidden = !complete;
+ }
+
+ if(messagesPrompt){
+  messagesPrompt.hidden = !complete;
+ }
+
+}
 
 /* ===== 言語 ===== */
 let lang='ja';
@@ -3678,12 +3699,25 @@ const playerRect = {
   /* ---------- ゲーム終了 ---------- */
 
   function finishGame(completed) {
+
     running = false;
     cancelAnimationFrame(raf);
     stopBgm();
     enemy.hidden = true;
     $('typing-choice-panel').hidden = true;
     result.hidden = false;
+
+    // 5問クリアした場合のみクリア状態を保存
+    if(completed){
+      try{
+        localStorage.setItem(TYPING_GAME_CLEAR_KEY, '1');
+      }catch(e){}
+    }
+
+    // エンディング解放条件を再確認
+    if(typeof maybeShowEnding === 'function'){
+      maybeShowEnding();
+    }
 
     soundEffect(completed ? 'clear' : 'over');
 
