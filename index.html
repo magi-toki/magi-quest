@@ -2285,33 +2285,45 @@ function allMessagesRead(){
 /* ===== エンディング解放判定 ===== */
 
 const TYPING_GAME_CLEAR_KEY = 'mq-typing-game-cleared';
+const PARFAIT_GAME_CLEAR_KEY = 'mq-parfait-game-cleared';
 
 function isTypingGameCleared(){
- try{
-  return localStorage.getItem(TYPING_GAME_CLEAR_KEY) === '1';
- }catch(e){
-  return false;
- }
+  try{
+    return localStorage.getItem(TYPING_GAME_CLEAR_KEY) === '1';
+  }catch(e){
+    return false;
+  }
+}
+
+function isParfaitGameCleared(){
+  try{
+    return localStorage.getItem(PARFAIT_GAME_CLEAR_KEY) === '1';
+  }catch(e){
+    return false;
+  }
 }
 
 function maybeShowEnding(){
 
- const complete =
-  allWorksViewed() &&
-  allMessagesRead() &&
-  isTypingGameCleared();
+  const complete =
+    allWorksViewed() &&
+    allMessagesRead() &&
+    isTypingGameCleared() &&
+    isParfaitGameCleared();
 
- const galleryPrompt = $('ending-prompt-gallery');
- const messagesPrompt = $('ending-prompt-messages');
+  const galleryPrompt = $('ending-prompt-gallery');
+  const messagesPrompt = $('ending-prompt-messages');
 
- if(galleryPrompt){
-  galleryPrompt.hidden = !complete;
- }
+  [galleryPrompt, messagesPrompt].forEach(prompt => {
+    if(!prompt) return;
 
- if(messagesPrompt){
-  messagesPrompt.hidden = !complete;
- }
+    prompt.hidden = !complete;
 
+    const button = prompt.querySelector('button');
+    if(button){
+      button.classList.toggle('glow', complete);
+    }
+  });
 }
 
 /* ===== 言語 ===== */
@@ -2789,10 +2801,21 @@ route();
 
     stopGameBgm();
 
-    if (clear) {
+        if (clear) {
       playGameClear();
+
+      // 制限時間を最後までクリアした状態を保存
+      try{
+        localStorage.setItem(PARFAIT_GAME_CLEAR_KEY, '1');
+      }catch(e){}
+
     } else {
       playGameOver();
+    }
+
+    // エンディング解放条件を再確認
+    if(typeof maybeShowEnding === 'function'){
+      maybeShowEnding();
     }
 
     clearInterval(fallingTimer);
