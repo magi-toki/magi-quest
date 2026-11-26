@@ -607,42 +607,317 @@ h1 {
   letter-spacing:.08em;
 }
 
-/* ===== エンディング ===== */
-.ending-content {
-  text-align:center;
-  padding:34px 16px;
-}
-.ending-kicker {
-  color:var(--y);
-  letter-spacing:.18em;
-  font-size:14px;
-}
-.ending-title {
-  color:var(--y);
-  font-size:clamp(30px,8vw,48px);
-  line-height:1.25;
-  margin:12px 0;
-  text-shadow:4px 4px 0 var(--ink);
-}
-.ending-message {
+
+/* ===== MAGI QUEST MOVIE ENDING ===== */
+
+#ending-stage {
+  position:relative;
+  width:100%;
+  min-height:100vh;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 50% 45%, #352064 0%, #160d35 55%, #08051b 100%);
   color:#fff;
-  font-size:18px;
-  margin:22px 0 8px;
+  text-align:center;
 }
-.ending-birthday {
-  color:var(--y);
-  font-size:clamp(19px,5vw,26px);
-  margin:8px 0 22px;
+
+/* 星空 */
+.ending-stars,
+.ending-diamonds {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
 }
+
 .ending-stars {
-  color:var(--y);
-  font-size:24px;
-  letter-spacing:.35em;
-  animation:bl .8s steps(2) infinite;
+  background-image:
+    radial-gradient(#fff 1px,transparent 1.5px),
+    radial-gradient(#ffdca0 1px,transparent 1.5px),
+    radial-gradient(#c9a8ff 1px,transparent 1.5px);
+  background-size:43px 47px,71px 83px,109px 97px;
+  background-position:0 0,17px 23px,41px 11px;
+  opacity:.85;
 }
-.ending-content .btn {
-  margin-top:12px;
+
+.ending-diamonds {
+  background-image:
+    radial-gradient(ellipse,#fff2bd 1px,transparent 2px);
+  background-size:67px 61px;
+  background-position:29px 13px;
+  opacity:.65;
 }
+
+/* マギ3羽 */
+.ending-magi {
+  position:absolute;
+  z-index:2;
+  width:54px;
+  height:54px;
+  pointer-events:none;
+}
+
+.ending-magi canvas.sp {
+  display:block;
+  width:100%;
+  height:100%;
+  image-rendering:pixelated;
+}
+
+.ending-magi-left {
+  top:19%;
+  left:-65px;
+  animation:endingFlyOne 12s linear infinite;
+}
+
+.ending-magi-right {
+  top:35%;
+  left:-65px;
+  width:42px;
+  height:42px;
+  animation:endingFlyTwo 15s linear infinite;
+}
+
+.ending-magi-small {
+  top:58%;
+  left:-45px;
+  width:30px;
+  height:30px;
+  animation:endingFlyThree 18s linear infinite;
+}
+
+@keyframes endingFlyOne {
+  to { transform:translateX(calc(100vw + 130px)) translateY(-25px); }
+}
+
+@keyframes endingFlyTwo {
+  to { transform:translateX(calc(100vw + 130px)) translateY(30px); }
+}
+
+@keyframes endingFlyThree {
+  to { transform:translateX(calc(100vw + 90px)) translateY(-15px); }
+}
+
+/* エンドロール */
+.ending-credit-roll {
+  position:absolute;
+  z-index:3;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.ending-credit-inner {
+  position:absolute;
+  width:100%;
+  top:100%;
+  padding:0 16px;
+  text-align:center;
+  transform:translateY(0);
+}
+
+.ending-credit-inner.is-running {
+  animation:endingCredits linear forwards;
+}
+
+@keyframes endingCredits {
+  from { top:100%; }
+  to { top:-100%; }
+}
+
+.ending-credit-heading {
+  color:#ffdca0;
+  font-size:clamp(18px,5vw,24px);
+  letter-spacing:.16em;
+  margin-bottom:30px;
+}
+
+.ending-credit-name {
+  color:#fff;
+  font-size:clamp(15px,4vw,19px);
+  line-height:2.1;
+  letter-spacing:.08em;
+}
+
+.ending-credit-present {
+  color:#ffd23f;
+  font-size:clamp(15px,4vw,19px);
+  margin-top:35px;
+  letter-spacing:.08em;
+}
+
+/* バースデー表示 */
+.ending-final {
+  position:absolute;
+  z-index:5;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 1s ease;
+}
+
+#ending-stage.birthday-on .ending-final {
+  opacity:1;
+  visibility:visible;
+}
+
+#ending-pixel-title {
+  display:block;
+  width:min(100%,720px);
+  height:auto;
+  image-rendering:pixelated;
+}
+
+.ending-final-line {
+  margin-top:24px;
+  color:#fff;
+  font-size:clamp(13px,3.5vw,19px);
+  letter-spacing:.08em;
+  text-shadow:2px 2px #4b2a9c;
+}
+
+/* 最後に登場するトキ */
+.ending-toki-final {
+  position:absolute;
+  z-index:7;
+  right:5%;
+  bottom:5%;
+  width:clamp(90px,22vw,150px);
+  opacity:0;
+  visibility:hidden;
+  transform:scale(.8);
+  transition:opacity .5s ease, transform .5s ease;
+}
+
+.ending-toki-final img {
+  display:block;
+  width:100%;
+  height:auto;
+  image-rendering:pixelated;
+}
+
+#ending-stage.toki-final-on .ending-toki-final {
+  opacity:1;
+  visibility:visible;
+  transform:scale(1);
+}
+
+/* ハート */
+.ending-heart {
+  position:absolute;
+  left:50%;
+  top:30%;
+  color:#ff6b9c;
+  font-size:20px;
+  opacity:0;
+  pointer-events:none;
+  text-shadow:0 0 8px #ff8db5;
+  z-index:8;
+}
+
+#ending-stage.hearts-on .ending-heart:nth-child(2) {
+  animation:endingHeartOne 1.2s ease-out forwards;
+}
+
+#ending-stage.hearts-on .ending-heart:nth-child(3) {
+  animation:endingHeartTwo 1.2s ease-out forwards;
+}
+
+#ending-stage.hearts-on .ending-heart:nth-child(4) {
+  animation:endingHeartThree 1.2s ease-out forwards;
+}
+
+#ending-stage.hearts-on .ending-heart:nth-child(5) {
+  animation:endingHeartFour 1.2s ease-out forwards;
+}
+
+@keyframes endingHeartOne {
+  0% {
+    opacity:0;
+    transform:translate(0,0) scale(.4);
+  }
+  25% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+    transform:translate(-45px,-75px) scale(1.3);
+  }
+}
+
+@keyframes endingHeartTwo {
+  0% {
+    opacity:0;
+    transform:translate(0,0) scale(.4);
+  }
+  25% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+    transform:translate(30px,-95px) scale(1.1);
+  }
+}
+
+@keyframes endingHeartThree {
+  0% {
+    opacity:0;
+    transform:translate(0,0) scale(.4);
+  }
+  25% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+    transform:translate(65px,-50px) scale(1.2);
+  }
+}
+
+@keyframes endingHeartFour {
+  0% {
+    opacity:0;
+    transform:translate(0,0) scale(.4);
+  }
+  25% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+    transform:translate(-15px,-120px) scale(1.4);
+  }
+}
+
+/* リプレイ */
+.ending-replay {
+  position:absolute;
+  z-index:10;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+}
+
+@media(max-width:480px) {
+  .ending-credit-name {
+    line-height:1.9;
+  }
+
+  .ending-magi-one { top:15%; }
+  .ending-magi-two { top:30%; }
+  .ending-magi-three { top:50%; }
+
+  .ending-toki-final {
+    right:3%;
+    bottom:4%;
+    width:100px;
+  }
+}
+
 
 
 
@@ -1143,7 +1418,29 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   display: none !important;
 }
 
+/* ===== エンディング表示の補正 ===== */
 
+/* マギのドット絵 */
+.ending-magi canvas.sp {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* hidden属性をCSSより優先 */
+#ending-final[hidden],
+#ending-toki-final[hidden] {
+  display: none !important;
+}
+
+/* トキのGIF */
+.ending-toki-final img {
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto;
+  image-rendering:pixelated;
+}
   
   
 </style>
@@ -1238,19 +1535,85 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 </section>
 
 <section id="v-ending" class="view" hidden>
- <div class="win ending-content">
-  <div class="ending-stars">✦ ★ ✦ ★ ✦</div>
-  <h2 class="ending-title">QUEST COMPLETE!</h2>
-  <p class="ending-message">Thank you for watching</p>
-  <p class="ending-birthday">Happy Birthday Kim Toki!</p>
-  <p class="note">WITH LOVE, FROM ALL MAGI ♡</p>
-  <br>
-  <button class="btn" type="button" data-go="top">BACK TO TOP</button>
- </div>
- <audio id="birthday-audio" preload="auto"
-  src="happy-birthday-famicom.wav"></audio>
-</section>
+ <div id="ending-stage">
 
+  <!-- 星空・装飾 -->
+  <div class="ending-stars" aria-hidden="true"></div>
+  <div class="ending-diamonds" aria-hidden="true"></div>
+
+  <!-- 飛んでいるマギ -->
+  <div class="ending-magi ending-magi-left" aria-hidden="true">
+   <i data-s="crow" data-z="2"></i>
+  </div>
+
+  <div class="ending-magi ending-magi-right" aria-hidden="true">
+   <i data-s="crow" data-z="2"></i>
+  </div>
+
+  <div class="ending-magi ending-magi-small" aria-hidden="true">
+   <i data-s="crow" data-z="1.3"></i>
+  </div>
+
+  <!-- 参加者クレジット -->
+  <div class="ending-credit-roll" id="ending-credit-roll">
+   <div class="ending-credit-inner" id="ending-credit-inner">
+
+    <p class="ending-credit-heading">SPECIAL THANKS</p>
+
+    <div id="ending-credit-names">
+     <!-- 参加者名はあとでJavaScriptから挿入 -->
+    </div>
+
+    <p class="ending-credit-present">
+     PRESENT by 다윤・nico
+    </p>
+
+   </div>
+  </div>
+
+  <!-- 最後のバースデー演出 -->
+  <div class="ending-final" id="ending-final" hidden>
+   <canvas id="ending-pixel-title"></canvas>
+
+   <p class="ending-final-line">
+    WITH LOVE, FROM ALL MAGI ♡
+   </p>
+  </div>
+
+  <!-- トキのウインクGIF -->
+  <div class="ending-toki-final" id="ending-toki-final" hidden>
+   <img src="images/toki_wink.gif"
+        alt="Kim Toki wink">
+
+   <span class="ending-heart">♥</span>
+   <span class="ending-heart">♥</span>
+   <span class="ending-heart">♥</span>
+   <span class="ending-heart">♥</span>
+  </div>
+
+  <!-- リプレイ -->
+  <button
+   class="btn ending-replay"
+   id="ending-replay"
+   type="button">
+   REPLAY
+  </button>
+
+  <button
+   class="btn"
+   type="button"
+   data-go="top">
+   BACK TO TOP
+  </button>
+
+ </div>
+
+ <audio
+  id="birthday-audio"
+  preload="auto"
+  src="happy-birthday-famicom.wav">
+ </audio>
+</section>
 
 <section id="v-gallery" class="view" hidden>
  <div class="win">
@@ -1773,25 +2136,207 @@ function stopAllSounds(){
 }
 
 
-/* ===== エンディング：ファミコン風 Happy Birthday ===== */
+/* ===== エンディング演出 ===== */
+
+const ENDING_DURATION = 13900;
+
+/* 参加者名：ここに実際の名前を追加してください */
+const ENDING_CREDITS = [
+ 'Nanka',
+ 'ほにゃ',
+  '矢渡セン/Yawatari Sen',
+  'おみす(오미스)',
+  'マリ',
+  '불꽃타입',
+  '都(to)',
+];
+
+let endingTimers = [];
+
+function endingLater(callback, delay){
+ const timer = setTimeout(callback, delay);
+ endingTimers.push(timer);
+}
+
+function clearEndingTimers(){
+ endingTimers.forEach(clearTimeout);
+ endingTimers = [];
+}
+
+
+
+function drawEndingTitle(){
+ const canvas = $('ending-pixel-title');
+ if(!canvas) return;
+
+ const ctx = canvas.getContext('2d');
+ const text = 'HAPPY BIRTHDAY KIM TOKI!';
+
+ const font = {
+  H:['10001','10001','10001','11111','10001','10001','10001'],
+  A:['01110','10001','10001','11111','10001','10001','10001'],
+  P:['11110','10001','10001','11110','10000','10000','10000'],
+  Y:['10001','10001','01010','00100','00100','00100','00100'],
+  B:['11110','10001','10001','11110','10001','10001','11110'],
+  I:['11111','00100','00100','00100','00100','00100','11111'],
+  R:['11110','10001','10001','11110','10100','10010','10001'],
+  T:['11111','00100','00100','00100','00100','00100','00100'],
+  D:['11110','10001','10001','10001','10001','10001','11110'],
+  K:['10001','10010','10100','11000','10100','10010','10001'],
+  M:['10001','11011','10101','10101','10001','10001','10001'],
+  O:['01110','10001','10001','10001','10001','10001','01110'],
+  '!':['00100','00100','00100','00100','00100','00000','00100'],
+  ' ':['00000','00000','00000','00000','00000','00000','00000']
+ };
+
+ const pixel = 6;
+ const charWidth = 6 * pixel;
+ const totalWidth = text.length * charWidth;
+
+ canvas.width = 900;
+ canvas.height = 100;
+
+ ctx.clearRect(0, 0, canvas.width, canvas.height);
+ ctx.fillStyle = '#ffd23f';
+ ctx.shadowColor = '#ffb700';
+ ctx.shadowBlur = 5;
+
+ const startX = (canvas.width - totalWidth) / 2;
+ const startY = (canvas.height - 7 * pixel) / 2;
+
+ [...text].forEach((char, index)=>{
+  const pattern = font[char];
+
+  pattern.forEach((line, y)=>{
+   [...line].forEach((bit, x)=>{
+    if(bit === '1'){
+     ctx.fillRect(
+      startX + index * charWidth + x * pixel,
+      startY + y * pixel,
+      pixel,
+      pixel
+     );
+    }
+   });
+  });
+ });
+
+ ctx.shadowBlur = 0;
+}
+
+
+function renderEndingCredits(){
+ const container = $('ending-credit-names');
+ if(!container) return;
+
+ container.replaceChildren();
+
+ ENDING_CREDITS.forEach(name=>{
+  const p = document.createElement('p');
+  p.className = 'ending-credit-name';
+  p.textContent = name;
+  container.appendChild(p);
+ });
+}
+
+function resetEndingStage(){
+ clearEndingTimers();
+
+ const inner = $('ending-credit-inner');
+ const final = $('ending-final');
+ const toki = $('ending-toki-final');
+ const replay = $('ending-replay');
+
+ if(inner){
+  inner.classList.remove('is-running');
+  inner.style.animationDuration = '';
+ }
+
+ if(final) final.hidden = true;
+ if(toki) toki.hidden = true;
+ if(replay) replay.hidden = false;
+
+ const stage = $('ending-stage');
+ if(stage){
+  stage.classList.remove(
+   'birthday-on',
+   'toki-final-on',
+   'hearts-on'
+  );
+ }
+
+ renderEndingCredits();
+
+ /* 動的に追加したマギのドット絵を変換 */
+ document.querySelectorAll('#ending-stage [data-s]').forEach(node=>{
+  node.replaceWith(px(node.dataset.s, Number(node.dataset.z) || 4));
+ });
+}
+
 function playBirthdaySong(){
- const player=$('birthday-audio');
- if(!player)return;
+ const player = $('birthday-audio');
+ if(!player) return;
 
  stopAllSounds();
 
- const isMobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+ const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 
- player.src=isMobile
-  ?'happy-birthday-famicom-iphone.wav'
-  :'happy-birthday-famicom.wav';
+ player.src = isMobile
+  ? 'happy-birthday-famicom-iphone.wav'
+  : 'happy-birthday-famicom.wav';
 
- player.volume=0.10;
- player.currentTime=0;
+ player.volume = 0.07;
+ player.currentTime = 0;
+
  player.play().catch(error=>{
-  console.warn('Birthday music autoplay was blocked.',error);
+  console.warn('Birthday music autoplay was blocked.', error);
  });
 }
+
+function startEndingSequence(){
+ resetEndingStage();
+
+ const inner = $('ending-credit-inner');
+ const final = $('ending-final');
+ const toki = $('ending-toki-final');
+
+ if(!inner || !final || !toki) return;
+
+ /* BGM */
+ playBirthdaySong();
+
+ /* クレジットを曲の長さに合わせてスクロール */
+ inner.style.animationDuration = ENDING_DURATION + 'ms';
+
+ requestAnimationFrame(()=>{
+  inner.classList.add('is-running');
+ });
+
+ /* クレジット終了後にバースデー文字 */
+  endingLater(()=>{
+  final.hidden = false;
+  $('ending-stage').classList.add('birthday-on');
+  drawEndingTitle();
+ }, ENDING_DURATION);
+
+ /* 文字が出た後にトキ登場 */
+ endingLater(()=>{
+  toki.hidden = false;
+
+  const stage = $('ending-stage');
+  stage.classList.add('toki-final-on');
+
+  endingLater(()=>{
+   stage.classList.add('hearts-on');
+  }, 500);
+
+ }, ENDING_DURATION + 1800);
+}
+
+/* リプレイボタン */
+$('ending-replay')?.addEventListener('click', ()=>{
+ startEndingSequence();
+});
   
 function playPew(){
  sound(980,330,.13,.11,'square');
@@ -2408,6 +2953,10 @@ function route(){
  const h=location.hash.slice(1);
 const v=['gallery','messages','secret','ending','game','typing-game'].includes(h)?h:'top';
 
+if(v !== 'ending'){
+ clearEndingTimers();
+}
+
 if (v !== 'game' && window.stopMagiGame) {
   window.stopMagiGame();
 }
@@ -2438,7 +2987,7 @@ if(v==='messages'){
 }
 
 if(v==='ending'){
-  playBirthdaySong();
+  startEndingSequence();
 }
 
 if(v==='typing-game'){
