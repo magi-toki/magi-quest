@@ -613,7 +613,8 @@ h1 {
 #ending-stage {
   position:relative;
   width:100%;
-  min-height:100vh;
+  height:min(100svh,760px);
+  min-height:min(100svh,520px);
   overflow:hidden;
   isolation:isolate;
   background:
@@ -649,55 +650,62 @@ h1 {
   opacity:.65;
 }
 
-/* マギ3羽 */
+/* マギ3羽：位置固定で浮遊 */
 .ending-magi {
   position:absolute;
   z-index:2;
+  pointer-events:none;
+  display:grid;
+  place-items:center;
+}
+
+.ending-magi-left {
+  top:18%;
+  left:8%;
   width:54px;
   height:54px;
-  pointer-events:none;
+  animation:magiFloatOne 3.2s ease-in-out infinite;
+}
+
+.ending-magi-right {
+  top:34%;
+  right:8%;
+  width:42px;
+  height:42px;
+  animation:magiFloatTwo 3.8s ease-in-out infinite;
+}
+
+.ending-magi-small {
+  top:57%;
+  left:25%;
+  width:30px;
+  height:30px;
+  animation:magiFloatThree 3.4s ease-in-out infinite;
 }
 
 .ending-magi canvas.sp {
   display:block;
-  width:100%;
-  height:100%;
+  width:100% !important;
+  height:100% !important;
   image-rendering:pixelated;
 }
 
-.ending-magi-left {
-  top:19%;
-  left:-65px;
-  animation:endingFlyOne 12s linear infinite;
+@keyframes magiFloatOne {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-12px); }
 }
 
-.ending-magi-right {
-  top:35%;
-  left:-65px;
-  width:42px;
-  height:42px;
-  animation:endingFlyTwo 15s linear infinite;
+@keyframes magiFloatTwo {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(10px); }
 }
 
-.ending-magi-small {
-  top:58%;
-  left:-45px;
-  width:30px;
-  height:30px;
-  animation:endingFlyThree 18s linear infinite;
+@keyframes magiFloatThree {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-8px); }
 }
 
-@keyframes endingFlyOne {
-  to { transform:translateX(calc(100vw + 130px)) translateY(-25px); }
-}
-
-@keyframes endingFlyTwo {
-  to { transform:translateX(calc(100vw + 130px)) translateY(30px); }
-}
-
-@keyframes endingFlyThree {
-  to { transform:translateX(calc(100vw + 90px)) translateY(-15px); }
-}
+  
 
 /* エンドロール */
 .ending-credit-roll {
@@ -769,9 +777,12 @@ h1 {
 
 #ending-pixel-title {
   display:block;
-  width:min(100%,720px);
+  width:min(100%,900px);
   height:auto;
   image-rendering:pixelated;
+  filter:
+    drop-shadow(0 0 8px #ffd23f)
+    drop-shadow(0 0 20px #ffb700);
 }
 
 .ending-final-line {
@@ -779,7 +790,7 @@ h1 {
   color:#fff;
   font-size:clamp(13px,3.5vw,19px);
   letter-spacing:.08em;
-  text-shadow:2px 2px #4b2a9c;
+  text-shadow:2px 2px #4b2a9c,0 0 12px #ffd23f;
 }
 
 /* 最後に登場するトキ */
@@ -903,13 +914,30 @@ h1 {
 }
 
 @media(max-width:480px) {
+  #ending-stage {
+    height:min(100svh,760px);
+    min-height:min(100svh,520px);
+    max-height:760px;
+  }
+
   .ending-credit-name {
     line-height:1.9;
   }
 
-  .ending-magi-one { top:15%; }
-  .ending-magi-two { top:30%; }
-  .ending-magi-three { top:50%; }
+  .ending-magi-left {
+    top:13%;
+    left:5%;
+  }
+
+  .ending-magi-right {
+    top:29%;
+    right:5%;
+  }
+
+  .ending-magi-small {
+    top:53%;
+    left:20%;
+  }
 
   .ending-toki-final {
     right:3%;
@@ -917,7 +945,6 @@ h1 {
     width:100px;
   }
 }
-
 
 
 
@@ -1441,6 +1468,83 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   height:auto;
   image-rendering:pixelated;
 }
+
+/* ===== エンディング解放通知 ===== */
+.ending-notice {
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(8,5,27,.78);
+}
+
+.ending-notice[hidden] {
+  display:none !important;
+}
+
+.ending-cloud {
+  position:relative;
+  isolation:isolate;
+  width:min(100%,420px);
+  padding:38px 20px 28px;
+  text-align:center;
+  color:#fff;
+  background:#4b2a9c;
+  border:4px solid #fff;
+  border-radius:28px 28px 18px 18px;
+  box-shadow:
+    0 0 0 5px #7a55d6,
+    0 0 28px #c9a8ff;
+  animation:cloudAppear .35s steps(4);
+}
+
+/* 雲のふくらみ */
+.ending-cloud::before,
+.ending-cloud::after {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  background:#4b2a9c;
+  border:4px solid #fff;
+  border-bottom:0;
+  box-shadow:0 -4px 0 #7a55d6;
+}
+
+.ending-cloud::before {
+  width:72px;
+  height:42px;
+  top:-23px;
+  left:18%;
+  border-radius:40px 40px 0 0;
+}
+
+.ending-cloud::after {
+  width:82px;
+  height:48px;
+  top:-27px;
+  right:16%;
+  border-radius:45px 45px 0 0;
+}
+
+.ending-cloud > * {
+  position:relative;
+  z-index:1;
+}
+
+.ending-notice-title {
+  color:#ffd23f;
+  font-size:clamp(22px,6vw,30px);
+  text-shadow:3px 3px #120a2a;
+}
+
+@keyframes cloudAppear {
+  from { transform:scale(.5); opacity:0; }
+  to { transform:scale(1); opacity:1; }
+}
+  
   
   
 </style>
@@ -1599,13 +1703,6 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
    REPLAY
   </button>
 
-  <button
-   class="btn"
-   type="button"
-   data-go="top">
-   BACK TO TOP
-  </button>
-
  </div>
 
  <audio
@@ -1663,6 +1760,27 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   <button class="btn" type="button" data-go="top" data-i="secret_back"></button>
  </div>
 </section>
+
+
+<div id="ending-unlocked-notice" class="ending-notice" hidden>
+ <div class="ending-cloud">
+  <p class="ending-notice-title">★ ALL CLEAR! ★</p>
+  <p>THANK YOU FOR WATCHING!</p>
+
+  <button class="btn" type="button" data-go="ending">
+   エンディングを見る
+  </button>
+
+  <button class="btn ending-notice-close" type="button">
+   CLOSE
+  </button>
+ </div>
+</div>
+
+
+  
+
+  
 </main>
 
 
@@ -2170,7 +2288,11 @@ function drawEndingTitle(){
  if(!canvas) return;
 
  const ctx = canvas.getContext('2d');
- const text = 'HAPPY BIRTHDAY KIM TOKI!';
+
+ const lines = [
+  'HAPPY BIRTHDAY',
+  'KIM TOKI!'
+ ];
 
  const font = {
   H:['10001','10001','10001','11111','10001','10001','10001'],
@@ -2189,39 +2311,38 @@ function drawEndingTitle(){
   ' ':['00000','00000','00000','00000','00000','00000','00000']
  };
 
- const pixel = 6;
+ const pixel = 9;
  const charWidth = 6 * pixel;
- const totalWidth = text.length * charWidth;
+ const lineHeight = 9 * pixel;
 
  canvas.width = 900;
- canvas.height = 100;
+ canvas.height = 220;
 
- ctx.clearRect(0, 0, canvas.width, canvas.height);
- ctx.fillStyle = '#ffd23f';
- ctx.shadowColor = '#ffb700';
- ctx.shadowBlur = 5;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
 
- const startX = (canvas.width - totalWidth) / 2;
- const startY = (canvas.height - 7 * pixel) / 2;
+ lines.forEach((text,lineIndex)=>{
+  const totalWidth = text.length * charWidth;
+  const startX = (canvas.width-totalWidth)/2;
+  const startY = 25 + lineIndex*lineHeight;
 
- [...text].forEach((char, index)=>{
-  const pattern = font[char];
+  [...text].forEach((char,index)=>{
+   const pattern = font[char];
 
-  pattern.forEach((line, y)=>{
-   [...line].forEach((bit, x)=>{
-    if(bit === '1'){
-     ctx.fillRect(
-      startX + index * charWidth + x * pixel,
-      startY + y * pixel,
-      pixel,
-      pixel
-     );
-    }
+   pattern.forEach((line,y)=>{
+    [...line].forEach((bit,x)=>{
+     if(bit !== '1') return;
+
+     const px = startX + index*charWidth + x*pixel;
+     const py = startY + y*pixel;
+
+     ctx.fillStyle = '#ffd23f';
+     ctx.shadowColor = '#ffb700';
+     ctx.shadowBlur = 18;
+     ctx.fillRect(px,py,pixel,pixel);
+    });
    });
   });
  });
-
- ctx.shadowBlur = 0;
 }
 
 
@@ -2319,9 +2440,15 @@ function startEndingSequence(){
   drawEndingTitle();
  }, ENDING_DURATION);
 
- /* 文字が出た後にトキ登場 */
+ /* 文字が出た後に登場 */
  endingLater(()=>{
   toki.hidden = false;
+
+  const tokiImage = toki.querySelector('img');
+
+  if(tokiImage){
+   tokiImage.src = 'images/toki_wink.gif?reload=' + Date.now();
+  }
 
   const stage = $('ending-stage');
   stage.classList.add('toki-final-on');
@@ -2333,11 +2460,11 @@ function startEndingSequence(){
  }, ENDING_DURATION + 1800);
 }
 
-/* リプレイボタン */
+/* リプレイボタン：イベント登録は一度だけ */
 $('ending-replay')?.addEventListener('click', ()=>{
  startEndingSequence();
 });
-  
+
 function playPew(){
  sound(980,330,.13,.11,'square');
  sound(1480,820,.08,.055,'sine',.02);
@@ -2848,28 +2975,45 @@ function isParfaitGameCleared(){
   }
 }
 
+let endingNoticeShown = false;
+
 function maybeShowEnding(){
 
-  const complete =
-    allWorksViewed() &&
-    allMessagesRead() &&
-    isTypingGameCleared() &&
-    isParfaitGameCleared();
+ const complete =
+  allWorksViewed() &&
+  allMessagesRead() &&
+  isTypingGameCleared() &&
+  isParfaitGameCleared();
 
-  const galleryPrompt = $('ending-prompt-gallery');
-  const messagesPrompt = $('ending-prompt-messages');
+ const galleryPrompt = $('ending-prompt-gallery');
+ const messagesPrompt = $('ending-prompt-messages');
 
-  [galleryPrompt, messagesPrompt].forEach(prompt => {
-    if(!prompt) return;
+ [galleryPrompt,messagesPrompt].forEach(prompt=>{
+  if(!prompt) return;
 
-    prompt.hidden = !complete;
+  prompt.hidden = !complete;
 
-    const button = prompt.querySelector('button');
-    if(button){
-      button.classList.toggle('glow', complete);
-    }
-  });
+  const button = prompt.querySelector('button');
+  if(button){
+   button.classList.toggle('glow',complete);
+  }
+ });
+
+ if(complete && !endingNoticeShown){
+  endingNoticeShown = true;
+
+  const notice = $('ending-unlocked-notice');
+
+  if(notice){
+   notice.hidden = false;
+  }
+ }
 }
+
+$('ending-unlocked-notice')?.querySelector('.ending-notice-close')
+ ?.addEventListener('click',()=>{
+  $('ending-unlocked-notice').hidden = true;
+});
 
 /* ===== 言語 ===== */
 let lang='ja';
