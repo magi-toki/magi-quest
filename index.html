@@ -3691,7 +3691,7 @@ const playerRect = {
   <h2 class="c">★ MAGI WORD BLASTER！ ★</h2>
 
   <p class="c" id="typing-description">
-    落ちてくる言葉を入力して敵を倒そう！
+    おちてくる言葉を入力して敵をたおそう！
   </p>
 
 <button
@@ -3803,7 +3803,7 @@ const playerRect = {
     <button
       type="button"
       class="glitch-close"
-      aria-label="閉じる"
+      aria-label="とじる"
       onclick="closeMagiUnlockNotice()"
     >×</button>
 
@@ -3828,7 +3828,7 @@ const playerRect = {
 <!-- ===== END MAGI WORD BLASTER GAME ===== -->
 
 <footer class="site-footer">
- 기획·제작　다윤 & nico
+ 기획·제작　다윤 ・ nico
 </footer>
 
 <script>
@@ -4054,7 +4054,7 @@ const playerRect = {
     );
 
     if (!isCorrect) {
-      $('typing-feedback').textContent = 'もう一度！';
+      $('typing-feedback').textContent = 'もういちど！';
       return;
     }
 
@@ -4283,7 +4283,7 @@ const playerRect = {
     const backButtons = game.querySelectorAll('button');
     backButtons.forEach(button => {
       if (button.textContent.includes('BACK')) {
-        button.textContent = ko ? '메인 화면으로' : 'トップへ戻る';
+        button.textContent = ko ? '메인 화면으로' : 'トップへもどる';
       }
     });
 
@@ -4400,7 +4400,7 @@ const playerRect = {
     if (!isCorrect) {
     $('typing-feedback').textContent = isKorean()
       ? '다시 도전!'
-      : 'もう一度！';
+      : 'もういちど！';
     return;
   }
 
@@ -4462,7 +4462,7 @@ const playerRect = {
 
     $('typing-result-message').textContent = isKorean()
       ? `정답 ${correct} / 5　${rating}`
-      : `正解 ${correct} / 5　${rating}`;
+      : `せいかい ${correct} / 5　${rating}`;
 
     $('typing-result-score').textContent = `SCORE：${score}`;
     $('typing-feedback').textContent = '';
@@ -4605,13 +4605,13 @@ window.openTypingSecretGame = function() {
 
     $('magi-glitch-message').innerHTML = ko
       ? '알 수 없는 게임 콘텐츠 감지<br>숨겨져 있던 게임이 해금되었습니다.'
-      : '未知のゲームコンテンツを検出<br>隠されていたゲームが解放されました。';
+      : '未知のゲームコンテンツをけんしゅつ<br>かくされていたゲームが解放されました。';
 
     $('magi-glitch-instruction').textContent = ko
       ? '▼ 메인 화면을 확인해 주세요! ▼'
-      : '▼ トップを確認して！ ▼';
+      : '▼ トップをかくにんして！ ▼';
 
-    $('magi-glitch-close-label').textContent = ko ? '닫기' : '閉じる';
+    $('magi-glitch-close-label').textContent = ko ? '닫기' : 'とじる';
 
     overlay.hidden = false;
     document.body.classList.add('magi-unlock-paused');
