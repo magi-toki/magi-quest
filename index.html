@@ -4391,69 +4391,66 @@ function resolveCorrectAnswer() {
   /* ---------- 言語表示 ---------- */
 
   function updateLanguage() {
-    const ko = isKorean();
-    const backButton = game.querySelector('[data-i="typing_back"]');
+  const ko = isKorean();
+  const backButton = game.querySelector('[data-i="typing_back"]');
 
-if (backButton) {
-  backButton.textContent = ko
-    ? '메인 화면으로'
-    : 'トップへ戻る';
-}
-
-    $('typing-description').textContent = ko
-      ? '떨어지는 글자의 발음을 입력해 적을 물리치세요!'
-      : '落ちてくる文字の読みを入力して敵をたおそう！';
-
-        const choiceMode = isMobileChoiceMode();
-
-   const isPlaying = game.classList.contains('typing-playing');
-
-$('typing-question').textContent = ko
-  ? '일본어 발음을 한글로 입력하세요!'
-  : choiceMode
-    ? '落ちてくる言葉のよみを選んでね！'
-    : '落ちてくる言葉のよみを入力してね！';
-
-input.placeholder = ko
-  ? '한글로 입력'
-  : 'ひらがな / カタカナで入力';
-
-    $('typing-submit').textContent = ko ? '공격!' : 'ATTACK!';
-
-    $('typing-retry').textContent = ko ? '다시 도전하기' : 'もう一度あそぶ';
-
-    const backButtons = game.querySelectorAll('button');
-    backButtons.forEach(button => {
-      if (button.textContent.includes('BACK')) {
-        button.textContent = ko ? '메인 화면으로' : 'トップへ戻る';
-      }
-    });
-
-        updateHud();
-
-    // 言語切り替え時に回答方式も更新
-
-    game.classList.toggle('mobile-choice', choiceMode);
-    input.disabled = choiceMode;
-
-    const choicePanel = $('typing-choice-panel');
-
-    if (choiceMode && running && current && !answering) {
-      showChoiceOptions();
-    } else {
-      choicePanel.hidden = true;
-    }
-
-    if (current) {
-  const shownWord = isKorean()
-    ? current.question
-    : current.jaQuestion;
-
-  wordEl.textContent = shownWord;
-  $('typing-current-word').textContent = shownWord;
-  wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
-}
+  if (backButton) {
+    backButton.textContent = ko
+      ? '메인 화면으로'
+      : 'トップへ戻る';
   }
+
+  $('typing-description').textContent = ko
+    ? '떨어지는 글자의 발음을 입력해 적을 물리치세요!'
+    : '落ちてくる文字の読みを入力して敵をたおそう！';
+
+  const choiceMode = isMobileChoiceMode();
+
+  $('typing-question').textContent = ko
+    ? '일본어 발음을 한글로 입력하세요!'
+    : choiceMode
+      ? '落ちてくる言葉のよみを選んでね！'
+      : '落ちてくる言葉のよみを入力してね！';
+
+  input.placeholder = ko
+    ? '한글로 입력'
+    : 'ひらがな / カタカナで入力';
+
+  $('typing-submit').textContent = ko ? '공격!' : 'ATTACK!';
+  $('typing-retry').textContent = ko ? '다시 도전하기' : 'もう一度あそぶ';
+
+  const backButtons = game.querySelectorAll('button');
+  backButtons.forEach(button => {
+    if (button.textContent.includes('BACK')) {
+      button.textContent = ko ? '메인 화면으로' : 'トップへ戻る';
+    }
+  });
+
+  // 回答方式を更新
+  game.classList.toggle('mobile-choice', choiceMode);
+  input.disabled = choiceMode;
+
+  updateHud();
+
+  // ゲーム中に言語が切り替わった場合、
+  // 切り替え先の専用データから問題を選び直す
+  if (running && current) {
+    queue = shuffle(
+      ko
+        ? koreanVocab
+        : vocab.filter(item => Boolean(item.jaQuestion))
+    ).slice(0, 5);
+
+    // 正解演出中なら、次の問題から新しい言語に切り替える
+    // 通常プレイ中なら、現在の問題を新しい言語で出し直す
+    if (!answering) {
+      makeEnemy();
+    }
+  } else {
+    $('typing-choice-panel').hidden = true;
+  }
+}
+
 
   /* ---------- HUD ---------- */
 
@@ -4675,6 +4672,7 @@ function submitAnswer() {
     index = 0;
     hp = 3;
     score = 0;
+    current = null;
     running = true;
 
     result.hidden = true;
