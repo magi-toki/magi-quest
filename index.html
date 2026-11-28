@@ -526,6 +526,23 @@ h1 {
   animation:partyPop .3s steps(3);
 }
 
+/* HP・MP MAXメッセージ */
+#max-status-message {
+  margin:12px 0 0;
+  padding:10px;
+  color:var(--y);
+  text-align:center;
+  line-height:1.8;
+  background:rgba(18,10,42,.65);
+  border:2px dashed var(--pl);
+  animation:partyPop .3s steps(3);
+}
+
+#max-status-message[hidden] {
+  display:none;
+}
+
+  
 @keyframes partyPop {
   40% {
     transform:scale(1.3) rotate(-8deg);
@@ -1513,12 +1530,34 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
     <div class="stat">MP<span class="bar"><i class="mp" id="mp"></i></span><b id="mpv"></b></div>
     <div>MAIN QUEST<br><b class="y">HAPPY BIRTHDAY!</b></div>
     <div class="party-row">ITEM
-     <button class="party-icon" type="button" aria-label="パフェ"><i data-s="parfait" data-z="3"></i></button>
-     <button class="party-icon" type="button" aria-label="宝石"><i data-s="gem" data-z="3"></i></button>
-     <button class="party-icon" type="button" aria-label="いちご"><i data-s="berry" data-z="3"></i></button>
-     <button class="party-icon" type="button" aria-label="プレゼント"><i data-s="present" data-z="3"></i></button>
-     <button class="secret-trigger" type="button" data-go="secret" aria-label="SECRET"></button>
-    </div>
+  <button class="party-icon" type="button"
+    aria-label="パフェ" data-hp="500" data-mp="0">
+    <i data-s="parfait" data-z="3"></i>
+  </button>
+
+  <button class="party-icon" type="button"
+    aria-label="宝石" data-hp="0" data-mp="500">
+    <i data-s="gem" data-z="3"></i>
+  </button>
+
+  <button class="party-icon" type="button"
+    aria-label="いちご" data-hp="300" data-mp="100">
+    <i data-s="berry" data-z="3"></i>
+  </button>
+
+  <button class="party-icon" type="button"
+    aria-label="プレゼント" data-hp="250" data-mp="250">
+    <i data-s="present" data-z="3"></i>
+  </button>
+
+  <button class="secret-trigger" type="button"
+    data-go="secret" aria-label="SECRET"></button>
+</div>
+
+<p id="max-status-message" hidden>
+  플레이해 주셔서 감사합니다.<br>
+  그런데 너무 한가하신 거 아니에요?
+</p>
    </div>
   </div>
  </div>
@@ -3054,19 +3093,58 @@ $('lj').onclick=()=>setLang('ja');
 $('lk').onclick=()=>setLang('ko');
 
 /* ===== HP / MP ===== */
-const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 
+const MAX_STATUS = 9999;
+
+let hpValue = 0;
+let mpValue = 0;
+
+// 初期値をランダムに決定
 function roll(){
- ['hp','mp'].forEach(k=>{
-  const v=rnd(3000,9999);
 
-  $(k).style.width=(v/99.99)+'%';
-  $(k+'v').textContent=v+'/9999';
- });
+  hpValue = 3000 + Math.floor(Math.random() * 5001);
+  mpValue = 3000 + Math.floor(Math.random() * 5001);
+
+  updateStatus();
 }
 
-$('stw').onclick=roll;
+// HP・MPの表示更新
+function updateStatus(){
 
+  $('hp').style.width = (hpValue / MAX_STATUS * 100) + '%';
+  $('mp').style.width = (mpValue / MAX_STATUS * 100) + '%';
+
+  $('hpv').textContent = hpValue + '/' + MAX_STATUS;
+  $('mpv').textContent = mpValue + '/' + MAX_STATUS;
+
+  const message = $('max-status-message');
+
+  if(hpValue >= MAX_STATUS && mpValue >= MAX_STATUS){
+    message.hidden = false;
+  }else{
+    message.hidden = true;
+  }
+}
+
+// ITEMクリック処理
+document.querySelectorAll('.party-icon').forEach(button=>{
+
+  button.addEventListener('click',()=>{
+
+    const hpGain = Number(button.dataset.hp || 0);
+    const mpGain = Number(button.dataset.mp || 0);
+
+    hpValue = Math.min(MAX_STATUS, hpValue + hpGain);
+    mpValue = Math.min(MAX_STATUS, mpValue + mpGain);
+
+    updateStatus();
+
+  });
+
+});
+
+// 初期表示
+roll();
 /* ===== 画面切り替え ===== */
 let T=[];
 let last=null;
