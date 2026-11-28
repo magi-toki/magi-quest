@@ -4256,6 +4256,13 @@ function submitChoiceAnswer(raw) {
 
   function updateLanguage() {
     const ko = isKorean();
+    const backButton = game.querySelector('[data-i="typing_back"]');
+
+if (backButton) {
+  backButton.textContent = ko
+    ? '메인 화면으로'
+    : 'トップへ戻る';
+}
 
     $('typing-description').textContent = ko
       ? '떨어지는 글자의 발음을 입력해 적을 물리치세요!'
