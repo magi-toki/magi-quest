@@ -3960,7 +3960,7 @@ const koreanVocab = [
   { question: 'きょう', answer: '쿄오', meaning: '오늘' },
   { question: 'くそげえむ', answer: '쿠소게에무', meaning: '똥겜' },
   { question: 'りょこう', answer: '료코오', meaning: '여행' },
-  { question: 'うつくしい おとこ', answer: '['우츠쿠시이 오토코', '우츠쿠시이오토코']', meaning: '아름다운 남자' },
+  { question: 'うつくしい おとこ', answer: ['우츠쿠시이 오토코', '우츠쿠시이오토코'], meaning: '아름다운 남자' },
   { question: 'きむさん', answer: '키무상', meaning: '김 씨' },
   { question: 'こんにちは', answer: '콘니치와', meaning: '안녕' },
   { question: 'いいぞ', answer: '이이조', meaning: '좋아' },
@@ -4010,7 +4010,9 @@ function isMobileChoiceMode() {
  // 現在の問題に対する3つの選択肢を作る
 function makeChoiceOptions() {
   const getAnswers = item =>
-    isKorean() ? [item.answer] : item.jaAnswers;
+  isKorean()
+    ? (Array.isArray(item.answer) ? item.answer : [item.answer])
+    : item.jaAnswers;
 
   const normalize = value =>
     isKorean()
@@ -4081,8 +4083,8 @@ function submitChoiceAnswer(raw) {
   const answer = normalize(raw);
 
   const accepted = isKorean()
-    ? [current.answer]
-    : current.jaAnswers;
+  ? (Array.isArray(current.answer) ? current.answer : [current.answer])
+  : current.jaAnswers;
 
   const isCorrect = accepted.some(item =>
     normalize(item) === answer
@@ -4433,8 +4435,8 @@ function submitAnswer() {
     : toHiragana(raw).replace(/\s+/g, '');
 
   const accepted = isKorean()
-    ? [current.answer]
-    : current.jaAnswers;
+  ? (Array.isArray(current.answer) ? current.answer : [current.answer])
+  : current.jaAnswers;
 
   const isCorrect = accepted.some(item => {
     const normalized = isKorean()
