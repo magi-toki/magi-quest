@@ -859,12 +859,10 @@ h1 {
   justify-content:center;
   padding:18px;
   text-align:center;
-  background:
-    radial-gradient(circle at 50% 40%,rgba(112,76,180,.55),transparent 65%),
-    rgba(9,5,28,.94);
-  box-shadow:
-    inset 0 0 0 5px #c9a8ff,
-    inset 0 0 0 9px #39216f;
+
+  /* 背景を透明にしてマギを見せる */
+  background:transparent;
+  box-shadow:none;
 }
 
 .ending-finale[hidden] {
@@ -1562,7 +1560,7 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 
    <div class="ending-diamonds"></div>
 
-   <!-- 既存のマギ画像を3体使用 -->
+   <!-- 大・中・小のマギ3体 -->
    <img
     class="ending-magi ending-magi-left"
     src="images/magi.gif"
@@ -1588,19 +1586,17 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
     <p class="ending-roll-message" data-i="ending_roll_message"></p>
    </div>
 
-   <!-- 最後の画面 -->
+   <!-- スタッフロール終了後の文字表示 -->
    <div class="ending-finale" id="ending-finale" hidden>
-
-    <p class="ending-finale-title">
-     HAPPY BIRTHDAY　
-    </p>
-    <p class="ending-finale-name">
-     Kim Toki
-    </p>
-    <p class="ending-finale-love">
-    ♡ WITH LOVE, FROM ALL MAGI ♡
-    </p>
+    <div class="ending-content">
+     <div class="ending-stars">✦ ★ ✦ ★ ✦</div>
+     <h2 class="ending-title">QUEST COMPLETE!</h2>
+     <p class="ending-message">Thank you for watching</p>
+     <p class="ending-birthday">Happy Birthday Kim Toki!</p>
+     <p class="note">WITH LOVE, FROM ALL MAGI ♡</p>
+    </div>
    </div>
+
   </div>
 
   <div class="ending-back">
@@ -1613,9 +1609,7 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   preload="auto"
   src="happy-birthday-famicom.wav">
  </audio>
-
 </section>
-
 
 <section id="v-gallery" class="view" hidden>
  <div class="win">
