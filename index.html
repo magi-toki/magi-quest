@@ -644,7 +644,193 @@ h1 {
   margin-top:12px;
 }
 
+/* ===== NEW ENDING：スタッフロール ===== */
 
+#ending-popup {
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(8,4,25,.88);
+}
+
+#ending-popup[hidden] {
+  display:none;
+}
+
+.ending-popup-window {
+  width:min(100%,420px);
+  padding:26px 18px;
+  text-align:center;
+  background:linear-gradient(#4b2a9c,#2c1668);
+  border:4px solid #c9a8ff;
+  box-shadow:0 0 0 4px #fff,8px 10px 0 rgba(0,0,0,.5);
+}
+
+.ending-popup-title {
+  color:var(--y);
+  font-size:clamp(19px,5vw,25px);
+  margin:0 0 12px;
+}
+
+.ending-popup-text {
+  margin:0 0 22px;
+  line-height:1.8;
+}
+
+.ending-stage {
+  position:relative;
+  width:100%;
+  max-width:420px;
+  height:min(52vh,420px);
+  min-height:280px;
+  max-height:420px;
+  margin:14px auto;
+  overflow:hidden;
+  isolation:isolate;
+  border:4px solid #c9a8ff;
+  background-color:#09051c;
+  background-image:
+    radial-gradient(circle,#fff 1px,transparent 1.5px),
+    radial-gradient(circle,#c9a8ff 1px,transparent 1.5px),
+    radial-gradient(circle,#ffd23f 1px,transparent 1.5px);
+  background-size:53px 53px,79px 79px,113px 113px;
+  background-position:0 0,25px 18px,42px 57px;
+}
+
+.ending-diamonds {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.65;
+  background:
+    radial-gradient(circle at 20% 25%,#c9a8ff 0 2px,transparent 3px),
+    radial-gradient(circle at 75% 35%,#fff 0 2px,transparent 3px),
+    radial-gradient(circle at 45% 70%,#ffd23f 0 2px,transparent 3px),
+    radial-gradient(circle at 85% 82%,#c9a8ff 0 2px,transparent 3px);
+  z-index:0;
+}
+
+.ending-magi {
+  position:absolute;
+  width:42px;
+  height:auto;
+  image-rendering:pixelated;
+  z-index:1;
+  pointer-events:none;
+  animation:ending-magi-float 2.4s ease-in-out infinite;
+}
+
+.ending-magi-left {
+  top:12px;
+  left:12px;
+}
+
+.ending-magi-right {
+  top:12px;
+  right:12px;
+}
+
+.ending-magi-bottom {
+  right:18px;
+  bottom:12px;
+}
+
+@keyframes ending-magi-float {
+  0%,100% {
+    transform:translateY(0);
+  }
+  50% {
+    transform:translateY(-9px);
+  }
+}
+
+.ending-roll {
+  position:absolute;
+  top:100%;
+  left:0;
+  width:100%;
+  padding:20px 14px 40px;
+  text-align:center;
+  z-index:2;
+  animation:ending-roll-scroll var(--roll-duration,90s) linear forwards;
+}
+
+@keyframes ending-roll-scroll {
+  from {
+    transform:translateY(0);
+  }
+  to {
+    transform:translateY(calc(-100% - var(--stage-height,420px)));
+  }
+}
+
+.ending-roll-title {
+  color:var(--y);
+  font-size:clamp(24px,6vw,32px);
+  margin:0 0 30px;
+  text-shadow:3px 3px 0 var(--ink);
+}
+
+.ending-thanks-name {
+  color:#fff;
+  font-size:clamp(16px,4vw,20px);
+  margin:0 0 17px;
+  overflow-wrap:anywhere;
+}
+
+.ending-roll-message {
+  color:#c9a8ff;
+  margin:35px 0;
+  font-size:15px;
+}
+
+.ending-finale {
+  position:absolute;
+  inset:0;
+  z-index:4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  text-align:center;
+  background:rgba(9,5,28,.88);
+}
+
+.ending-finale[hidden] {
+  display:none;
+}
+
+.ending-finale-title {
+  color:#fff;
+  font-size:clamp(24px,7vw,36px);
+  line-height:1.3;
+  margin:0;
+  text-shadow:3px 3px 0 var(--ink);
+}
+
+.ending-finale-name {
+  color:var(--y);
+  font-size:clamp(28px,8vw,42px);
+  margin:8px 0 28px;
+  text-shadow:3px 3px 0 var(--ink);
+}
+
+.ending-finale-love {
+  color:#fff;
+  font-size:clamp(13px,3.5vw,17px);
+  line-height:1.7;
+  margin:0;
+}
+
+.ending-back {
+  margin:16px auto;
+  text-align:center;
+}
 
 /* ===== MAGI PARFAIT DASH ===== */
 #game-stage {
@@ -1162,6 +1348,30 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
  </div>
 </header>
 
+
+<div id="ending-popup" hidden>
+ <div class="ending-popup-window">
+  <h2 class="ending-popup-title" data-i="ending_popup_title"></h2>
+  <p class="ending-popup-text" data-i="ending_popup_text"></p>
+
+  <button
+   class="btn"
+   id="ending-popup-view"
+   type="button"
+   data-i="ending_popup_view">
+  </button>
+
+  <button
+   class="btn"
+   id="ending-popup-close"
+   type="button"
+   data-i="ending_popup_close">
+  </button>
+ </div>
+</div>
+  
+
+  
 <main class="wrap">
 <section id="v-top" class="view">
  <div class="c">
@@ -1196,6 +1406,14 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
   <button class="cmd" data-go="gallery"><i data-s="chestC" data-z="2"></i><span data-i="cmd_g"></span></button>
   <button class="cmd" data-go="messages"><i data-s="letter" data-z="2"></i><span data-i="cmd_m"></span></button>
   <button class="cmd" data-go="game"><i data-s="star" data-z="2"></i><span>MAGI PARFAIT PARTY！</span></button>
+　<button class="cmd" id="ending-menu-button" data-go="ending" hidden>
+ <i data-s="star" data-z="2"></i>
+ <span data-i="ending_menu"></span>
+</button>
+
+
+
+   
 
 <!-- MAGI WORD BLASTER 隠しゲーム入口 -->
 <button class="cmd" id="typing-secret-entry" type="button" hidden onclick="openTypingSecretGame()">
@@ -1238,17 +1456,75 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 </section>
 
 <section id="v-ending" class="view" hidden>
- <div class="win ending-content">
-  <div class="ending-stars">✦ ★ ✦ ★ ✦</div>
-  <h2 class="ending-title">QUEST COMPLETE!</h2>
-  <p class="ending-message">Thank you for watching</p>
-  <p class="ending-birthday">Happy Birthday Kim Toki!</p>
-  <p class="note">WITH LOVE, FROM ALL MAGI ♡</p>
-  <br>
-  <button class="btn" type="button" data-go="top">BACK TO TOP</button>
+
+ <div class="win">
+  <h2 class="c" data-i="ending_title"></h2>
+
+  <div class="ending-stage" id="ending-stage">
+
+   <div class="ending-diamonds"></div>
+
+   <!-- 既存のマギ画像を3体使用 -->
+   <img
+    class="ending-magi ending-magi-left"
+    src="images/magi.gif"
+    alt=""
+    draggable="false">
+
+   <img
+    class="ending-magi ending-magi-right"
+    src="images/magi.gif"
+    alt=""
+    draggable="false">
+
+   <img
+    class="ending-magi ending-magi-bottom"
+    src="images/magi.gif"
+    alt=""
+    draggable="false">
+
+   <!-- スタッフロール -->
+   <div class="ending-roll" id="ending-roll">
+
+    <h2 class="ending-roll-title">SPECIAL THANKS</h2>
+
+    <div id="ending-thanks-list"></div>
+
+    <p class="ending-roll-message" data-i="ending_roll_message"></p>
+
+   </div>
+
+   <!-- 最後の画面 -->
+   <div class="ending-finale" id="ending-finale" hidden>
+
+    <p class="ending-finale-title">
+     HAPPY BIRTHDAY
+    </p>
+
+    <p class="ending-finale-name">
+     Kim Toki
+    </p>
+
+    <p class="ending-finale-love">
+     WITH LOVE, FROM ALL MAGI ♡
+    </p>
+
+   </div>
+
+  </div>
+
+  <div class="ending-back">
+   <button class="btn" type="button" data-go="top" data-i="ending_back"></button>
+  </div>
+
  </div>
- <audio id="birthday-audio" preload="auto"
-  src="happy-birthday-famicom.wav"></audio>
+
+ <audio
+  id="birthday-audio"
+  preload="auto"
+  src="happy-birthday-famicom.wav">
+ </audio>
+
 </section>
 
 
@@ -1992,6 +2268,16 @@ ja:{
  gal_n:'マギから届いた作品をえらんで、たからばこを開こう。',
  game_guide:'トキニムのお祝いのためにパフェといちごをあつめよう！',
  ending_prompt:'エンディングを見る',
+ ending_title:'ENDING / みんな ありがとう！',
+
+ending_popup_title:'ぜんぶ みてくれて ありがとう！',
+ending_popup_text:'エンディングが 解放されたよ！',
+ending_popup_view:'エンディングを見る',
+ending_popup_close:'とじる',
+
+ending_menu:'エンディング',
+ending_roll_message:'さいごまで みてくれて ありがとう！',
+ending_back:'トップにもどる', 
  empty:'表示できる作品がありません。',
  snote:'これはサンプル作品です。',
  msg_h:'MESSAGE / おいわいメッセージ',
@@ -2013,6 +2299,8 @@ ja:{
  secret_credit:'기획·제작　다윤 & nico',
  secret_back:'처음으로 돌아가기'
 },
+
+  
 ko:{
  nav_top:'처음으로',
  nav_g:'작품 보기',
@@ -2026,6 +2314,14 @@ ko:{
  gal_n:'마기가 보내준 작품을 골라 보물상자를 열어 봐요.',
  game_guide:'토키님의 생일을 축하하기 위해 파르페와 딸기를 모으자!',
  ending_prompt:'엔딩 보기',
+ ending_title:'ENDING / 모두 고마워요!',
+ ending_popup_title:'모두 봐 주셔서 감사해요!',
+ ending_popup_text:'엔딩이 해금되었어요!',
+ ending_popup_view:'엔딩 보기',
+ ending_popup_close:'닫기',
+ ending_menu:'엔딩',
+ ending_roll_message:'끝까지 함께해 주셔서 감사합니다!',
+ ending_back:'처음으로',  
  empty:'표시할 작품이 없습니다.',
  snote:'샘플 작품입니다.',
  msg_h:'MESSAGE / 축하 메시지',
@@ -2303,6 +2599,85 @@ function isParfaitGameCleared(){
   }
 }
 
+/* ===== エンディング解放判定 ===== */
+
+const ENDING_UNLOCKED_KEY = 'mq-ending-unlocked';
+const ENDING_POPUP_SHOWN_KEY = 'mq-ending-popup-shown';
+
+/*
+ * SPECIAL THANKSに手動で追加する名前
+ *
+ * ここに名前を追加すれば、
+ * エンディングのスタッフロールにも表示されます。
+ */
+const SPECIAL_THANKS_EXTRA = [
+  '다윤',
+  'nico',
+
+  // 追加したい名前はこの下に書く
+  // '名前',
+  // '名前',
+];
+
+
+/* SPECIAL THANKSの名前を画面に表示 */
+function renderSpecialThanks(){
+
+  const list = $('ending-thanks-list');
+  if(!list)return;
+
+  list.replaceChildren();
+
+  // 作品データから作者名を取得
+  const workNames = WORKS
+    .map(w => L(w.author))
+    .filter(name => name && !name.includes('■■(name)'));
+
+  // 手動追加分と合わせて重複を除去
+  const names = [...new Set([
+    ...workNames,
+    ...SPECIAL_THANKS_EXTRA
+  ])];
+
+  names.forEach(name => {
+
+    const p = document.createElement('p');
+
+    p.className = 'ending-thanks-name';
+    p.textContent = name;
+
+    list.appendChild(p);
+
+  });
+
+}
+
+
+/* エンディング解放状態を確認 */
+function isEndingUnlocked(){
+
+  try{
+    return localStorage.getItem(ENDING_UNLOCKED_KEY) === '1';
+  }catch(e){
+    return false;
+  }
+
+}
+
+
+/* ポップアップを閉じる */
+function closeEndingPopup(){
+
+  const popup = $('ending-popup');
+
+  if(popup){
+    popup.hidden = true;
+  }
+
+}
+
+
+/* エンディング解放判定 */
 function maybeShowEnding(){
 
   const complete =
@@ -2311,22 +2686,151 @@ function maybeShowEnding(){
     isTypingGameCleared() &&
     isParfaitGameCleared();
 
-  const galleryPrompt = $('ending-prompt-gallery');
-  const messagesPrompt = $('ending-prompt-messages');
+  const menuButton = $('ending-menu-button');
+  const popup = $('ending-popup');
 
-  [galleryPrompt, messagesPrompt].forEach(prompt => {
-    if(!prompt) return;
+  // 解放済みなら状態を保存
+  if(complete){
 
-    prompt.hidden = !complete;
+    try{
+      localStorage.setItem(ENDING_UNLOCKED_KEY,'1');
+    }catch(e){}
 
-    const button = prompt.querySelector('button');
-    if(button){
-      button.classList.toggle('glow', complete);
+  }
+
+  const unlocked = complete || isEndingUnlocked();
+
+  // トップ画面のメニュー表示
+  if(menuButton){
+    menuButton.hidden = !unlocked;
+  }
+
+  // 旧ギャラリー・メッセージ内の案内は使用しない
+  [
+    $('ending-prompt-gallery'),
+    $('ending-prompt-messages')
+  ].forEach(prompt => {
+    if(prompt){
+      prompt.hidden = true;
     }
   });
+
+  // 未解放ならポップアップを表示しない
+  if(!unlocked || !popup)return;
+
+  // すでに一度表示していたら再表示しない
+  let alreadyShown = false;
+
+  try{
+    alreadyShown =
+      localStorage.getItem(ENDING_POPUP_SHOWN_KEY) === '1';
+  }catch(e){}
+
+  if(alreadyShown)return;
+
+  // 初回解放時だけ表示
+  popup.hidden = false;
+
+  try{
+    localStorage.setItem(ENDING_POPUP_SHOWN_KEY,'1');
+  }catch(e){}
+
 }
 
+
+/* ポップアップのボタン */
+$('ending-popup-view').addEventListener('click',()=>{
+
+  closeEndingPopup();
+
+  location.hash = 'ending';
+
+});
+
+
+$('ending-popup-close').addEventListener('click',()=>{
+
+  closeEndingPopup();
+
+});
+
 /* ===== 言語 ===== */
+/* ===== エンディング：スタッフロール演出 ===== */
+
+
+/* 最後の画面を表示 */
+function showEndingFinale(){
+
+  const roll = $('ending-roll');
+  const finale = $('ending-finale');
+
+  if(roll){
+    roll.hidden = true;
+  }
+
+  if(finale){
+    finale.hidden = false;
+  }
+
+}
+
+
+/* スタッフロールを開始 */
+function startEndingRoll(){
+
+  const stage = $('ending-stage');
+  const roll = $('ending-roll');
+  const finale = $('ending-finale');
+  const player = $('birthday-audio');
+
+  if(!stage || !roll || !finale || !player)return;
+
+  // 名前を現在の言語で再描画
+  renderSpecialThanks();
+
+  // 最後の画面を隠す
+  finale.hidden = true;
+  roll.hidden = false;
+
+  // ステージの高さをCSSに渡す
+  stage.style.setProperty(
+    '--stage-height',
+    `${stage.clientHeight}px`
+  );
+
+  // 音楽の長さに合わせてスクロール
+  function updateRollDuration(){
+  let duration = player.duration;
+
+  // 音源の長さを取得できない場合の予備時間
+  if(!Number.isFinite(duration) || duration <= 0){
+  duration = 90;
+  }
+
+    roll.style.setProperty(
+      '--roll-duration',
+      `${duration}s`
+    );
+
+   // アニメーションを最初から再生
+    roll.style.animation = 'none';
+    void roll.offsetWidth;
+    roll.style.animation = '';
+    }
+
+  // 音楽が終わったら最後の画面へ
+  player.onended = showEndingFinale;
+
+  // スタッフロールが終わった場合も最後の画面へ
+  roll.onanimationend = showEndingFinale;
+
+  // 音源の長さが取得済みならすぐ開始
+  updateRollDuration();
+
+  // 音源の読み込み後にもう一度長さを合わせる
+  player.onloadedmetadata = updateRollDuration;
+
+}
 let lang='ja';
 
 try{
@@ -2362,12 +2866,17 @@ function setLang(l){
   localStorage.setItem('mq-lang',l);
  }catch(e){}
 
- closeW();
- applyLang();
+closeW();
+applyLang();
+if(!$('v-ending').hidden){
+  renderSpecialThanks();
+}
+
 if (typeof window.updateMagiTypingLanguage === 'function') {
   window.updateMagiTypingLanguage();
 }
- grid();
+
+grid();
 
  if(!$('v-messages').hidden){
   say();
@@ -2438,7 +2947,8 @@ if(v==='messages'){
 }
 
 if(v==='ending'){
-  playBirthdaySong();
+ playBirthdaySong();
+ startEndingRoll();
 }
 
 if(v==='typing-game'){
