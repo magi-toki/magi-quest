@@ -1411,14 +1411,16 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
  <span data-i="ending_menu"></span>
 </button>
 
-
-
-   
-
 <!-- MAGI WORD BLASTER 隠しゲーム入口 -->
 <button class="cmd" id="typing-secret-entry" type="button" hidden onclick="openTypingSecretGame()">
   <span class="typing-flame">🔥</span>
   <span>MAGI WORD BLASTER！</span>
+</button>
+
+<!-- エンディング解放後に表示 -->
+<button class="cmd" id="ending-menu-button" data-go="ending" type="button" hidden>
+  <i data-s="cake" data-z="2"></i>
+  <span data-i="ending_menu"></span>
 </button>
 
  </div>
@@ -1739,6 +1741,18 @@ KWWWWKKWWWWK
 KWWWWWWWWWWK
 KWWWWRRWWWWK
 KKKKKKKKKKKK`,
+
+cake:`.....Y.....
+....YYY....
+...K...K...
+..KKKKKKK..
+.KRRRRRRRK.
+.KRYYYYYRK.
+.KRRRRRRRK.
+.KWWWWWWWK.
+.KKKKKKKKK.
+..K.....K..
+...KKKKK...`,
 
 book:`.KKKKKKKKK.
 KPPPPPPPPPK
@@ -2275,7 +2289,7 @@ ending_popup_text:'エンディングが 解放されたよ！',
 ending_popup_view:'エンディングを見る',
 ending_popup_close:'とじる',
 
-ending_menu:'エンディング',
+ending_menu:'エンディングを見る',
 ending_roll_message:'さいごまで みてくれて ありがとう！',
 ending_back:'トップにもどる', 
  empty:'表示できる作品がありません。',
