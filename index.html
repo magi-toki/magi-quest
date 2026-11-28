@@ -249,6 +249,11 @@ h1 {
   position:relative;
   cursor:pointer;
 }
+  
+  /* hidden属性が付いたコマンドは確実に非表示 */
+.cmd[hidden] {
+  display:none !important;
+}
 
 .cmd::before {
   content:"";
@@ -1519,9 +1524,9 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 
   <!-- エンディング解放後に表示 -->
   <button class="cmd" id="ending-menu-button" data-go="ending" type="button" hidden>
-   <i data-s="cake" data-z="2"></i>
-   <span data-i="ending_menu"></span>
-  </button>
+  <i data-s="crow" data-z="2"></i>
+  <span data-i="ending_menu"></span>
+ </button>
 
  </div>
 </section>
