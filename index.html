@@ -1459,7 +1459,7 @@ body.magi-unlock-paused > *:not(#magi-glitch-unlock){
 <body>
 <header id="bar">
  <div id="nav" hidden>
-  <button class="btn" data-go="top" data-i="nav_top"></button>
+  <button class="btn" type="button" data-go="top" data-i="game_back"></button>
   <button class="btn" data-go="gallery" data-i="nav_g"></button>
   <button class="btn" data-go="messages" data-i="nav_m"></button>
  </div>
@@ -2405,10 +2405,12 @@ ja:{
  cmd_g:'さくひんを見る',
  cmd_m:'おいわいメッセージ',
  cmd_t:'トップにもどる',
-  gal_h:'GALLERY / さくひんギャラリー',
+ gal_h:'GALLERY / さくひんギャラリー',
  gal_n:'マギから届いた作品をえらんで、たからばこを開こう。',
  game_guide:'トキニムのお祝いのためにパフェといちごをあつめよう！',
  ending_prompt:'エンディングを見る',
+ game_back:'トップへ戻る',
+ typing_back:'トップへ戻る',
 
 ending_popup_title:'ぜんぶ みてくれて ありがとう！',
 ending_popup_text:'エンディングが 解放されたよ！',
@@ -2473,6 +2475,8 @@ ko:{
  kind:'　종류: ',
  cmt:'작가 코멘트',
  noimg:'NO IMAGE',
+ game_back:'메인 화면으로',
+ typing_back:'메인 화면으로',
  prev:'이전',
  next:'다음',
  again:'처음으로',
@@ -3767,12 +3771,11 @@ const playerRect = {
     <p id="typing-feedback" aria-live="polite"></p>
 
     <button
-      type="button"
-      class="btn"
-      onclick="closeTypingSecretGame()"
-    >
-      BACK TO TOP
-    </button>
+  type="button"
+  class="btn"
+  data-i="typing_back"
+  onclick="closeTypingSecretGame()"
+></button>
   </div>
 </section>
 
