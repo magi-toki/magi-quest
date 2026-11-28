@@ -3947,6 +3947,21 @@ const playerRect = {
   }
 ];
 
+// ===== 韓国語版専用問題 =====
+// question：ひらがな出題
+// answer：読みをハングルで表記
+// meaning：韓国語での意味
+const koreanVocab = [
+  { question: 'りんご', answer: '링고', meaning: '사과' },
+  { question: 'ねこ', answer: '네코', meaning: '고양이' },
+  { question: 'いぬ', answer: '이누', meaning: '개' },
+  { question: 'みず', answer: '미즈', meaning: '물' },
+  { question: 'さくら', answer: '사쿠라', meaning: '벚꽃' },
+  { question: 'きょう', answer: '쿄오', meaning: '오늘' },
+  { question: 'あした', answer: '아시타', meaning: '내일' }
+];
+  
+
   function language() {
     return typeof lang !== 'undefined' && lang === 'ko' ? 'ko' : 'ja';
   }
@@ -3969,10 +3984,10 @@ function isMobileChoiceMode() {
   return window.matchMedia('(max-width: 480px)').matches;
 }
 
-  // 現在の問題に対する3つの選択肢を作る
+ // 現在の問題に対する3つの選択肢を作る
 function makeChoiceOptions() {
   const getAnswers = item =>
-    isKorean() ? item.koAnswers : item.jaAnswers;
+    isKorean() ? [item.answer] : item.jaAnswers;
 
   const normalize = value =>
     isKorean()
@@ -3982,7 +3997,9 @@ function makeChoiceOptions() {
   const accepted = getAnswers(current).map(normalize);
   const distractors = [];
 
-  vocab.forEach(item => {
+  const source = isKorean() ? koreanVocab : vocab;
+
+  source.forEach(item => {
     getAnswers(item).forEach(answer => {
       const normalized = normalize(answer);
 
@@ -3998,7 +4015,6 @@ function makeChoiceOptions() {
     });
   });
 
-  // 正解候補から1つ、誤答候補から2つ選ぶ
   const correctOption = shuffle(getAnswers(current))[0];
   const wrongOptions = shuffle(distractors).slice(0, 2);
 
@@ -4030,7 +4046,7 @@ function makeChoiceOptions() {
     panel.hidden = false;
   }
 
- // 3択の回答を判定する
+// 3択の回答を判定する
 function submitChoiceAnswer(raw) {
   if (!running || answering) return;
 
@@ -4040,8 +4056,9 @@ function submitChoiceAnswer(raw) {
       : toHiragana(value).replace(/\s+/g, '');
 
   const answer = normalize(raw);
+
   const accepted = isKorean()
-    ? current.koAnswers
+    ? [current.answer]
     : current.jaAnswers;
 
   const isCorrect = accepted.some(item =>
@@ -4058,49 +4075,47 @@ function submitChoiceAnswer(raw) {
   resolveCorrectAnswer();
 }
 
-   // 正解時の共通処理
-  function resolveCorrectAnswer() {
-    if (!running || answering) return;
+  // 正解時の共通処理
+function resolveCorrectAnswer() {
+  if (!running || answering) return;
 
-    answering = true;
-    cancelAnimationFrame(raf);
+  answering = true;
+  cancelAnimationFrame(raf);
 
-    score += 100;
-    updateHud();
+  score += 100;
+  updateHud();
 
-    soundEffect('hit');
+  soundEffect('hit');
 
-    enemy.classList.add('typing-explode');
+  enemy.classList.add('typing-explode');
 
-    $('typing-feedback').textContent = isKorean() ? '정답!' : 'HIT!';
+  $('typing-feedback').textContent = isKorean()
+    ? '정답!'
+    : 'HIT!';
 
-    // 正解後に意味を表示
-    const meaning = isKorean()
-  ? (current.koMeaning || current.jaQuestion)
-  : current.koQuestion;
+  const meaningEl = $('typing-meaning');
 
-    const meaningEl = $('typing-meaning');
-    meaningEl.textContent = isKorean()
-      ? `뜻：${meaning || '등록되지 않음'}`
-      : `意味：${meaning || '登録なし'}`;
+  meaningEl.textContent = isKorean()
+    ? current.meaning
+    : `意味：${current.koQuestion || '登録なし'}`;
 
-    meaningEl.hidden = false;
+  meaningEl.hidden = false;
 
-    const panel = $('typing-choice-panel');
-    if (panel) panel.hidden = true;
+  const panel = $('typing-choice-panel');
+  if (panel) panel.hidden = true;
 
-    setTimeout(() => {
+  setTimeout(() => {
+    if (running) {
+      nextQuestion();
+
       if (running) {
-        nextQuestion();
-
-        if (running) {
-          answering = false;
-          lastTime = performance.now();
-          raf = requestAnimationFrame(frame);
-        }
+        answering = false;
+        lastTime = performance.now();
+        raf = requestAnimationFrame(frame);
       }
-        }, 1200);
-  }
+    }
+  }, 1200);
+}
 
   function toHiragana(value) {
     return value.replace(/[ァ-ヶ]/g, ch =>
@@ -4272,16 +4287,15 @@ if (backButton) {
 
    const isPlaying = game.classList.contains('typing-playing');
 
-$('typing-question').textContent = choiceMode
-  ? (ko
-      ? '위에서 떨어지는 단어의 발음을 선택해 주세요!'
-      : '上から落ちてくる言葉のよみを選んでください！')
-  : (ko
-      ? '일본어 발음을 한글로 입력하세요!'
-      : '落ちてくる韓国語の読みを入力してね！');
-    input.placeholder = ko
-      ? '한글로 입력'
-      : 'ひらがな / カタカナで入力';
+$('typing-question').textContent = ko
+  ? '일본어 발음을 한글로 입력하세요!'
+  : choiceMode
+    ? '落ちてくる言葉のよみを選んでね！'
+    : '落ちてくる言葉のよみを入力してね！';
+
+input.placeholder = ko
+  ? '한글로 입력'
+  : 'ひらがな / カタカナで入力';
 
     $('typing-submit').textContent = ko ? '공격!' : 'ATTACK!';
 
@@ -4310,14 +4324,14 @@ $('typing-question').textContent = choiceMode
     }
 
     if (current) {
-      const shownWord = isKorean()
-        ? current.koQuestion
-        : current.jaQuestion;
+  const shownWord = isKorean()
+    ? current.question
+    : current.jaQuestion;
 
-      wordEl.textContent = shownWord;
-      $('typing-current-word').textContent = shownWord;
-      wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
-    }
+  wordEl.textContent = shownWord;
+  $('typing-current-word').textContent = shownWord;
+  wordEl.classList.toggle('typing-word-long', shownWord.length >= 7);
+}
   }
 
   /* ---------- HUD ---------- */
@@ -4338,8 +4352,8 @@ $('typing-question').textContent = choiceMode
    $('typing-meaning').hidden = true;   
 
   const shownWord = isKorean()
-    ? current.koQuestion
-    : current.jaQuestion;
+  ? current.question
+  : current.jaQuestion;
 
   wordEl.textContent = shownWord;
   $('typing-current-word').textContent = shownWord;
@@ -4384,27 +4398,30 @@ $('typing-question').textContent = choiceMode
   updateHud();
 }
    
-  /* ---------- 問題の判定 ---------- */
-
- function submitAnswer() {
+ // 入力回答の判定
+function submitAnswer() {
   if (!running || answering) return;
 
   const raw = $('typing-answer').value.trim();
   if (!raw) return;
 
   const answer = isKorean()
-    ? raw.replace(/\s+/g, '')
+    ? raw.normalize('NFKC').replace(/\s+/g, '')
     : toHiragana(raw).replace(/\s+/g, '');
 
   const accepted = isKorean()
-    ? current.koAnswers
+    ? [current.answer]
     : current.jaAnswers;
 
-  const isCorrect = accepted.some(
-    item => item.replace(/\s+/g, '') === answer
-  );
+  const isCorrect = accepted.some(item => {
+    const normalized = isKorean()
+      ? item.normalize('NFKC').replace(/\s+/g, '')
+      : toHiragana(item).replace(/\s+/g, '');
 
-    if (!isCorrect) {
+    return normalized === answer;
+  });
+
+  if (!isCorrect) {
     $('typing-feedback').textContent = isKorean()
       ? '다시 도전!'
       : 'もう一度！';
@@ -4530,11 +4547,9 @@ $('typing-question').textContent = choiceMode
     stage.hidden = false;
 
   queue = shuffle(
-  vocab.filter(item =>
-    isKorean()
-      ? Boolean(item.koQuestion)
-      : Boolean(item.jaQuestion)
-  )
+  isKorean()
+    ? koreanVocab
+    : vocab.filter(item => Boolean(item.jaQuestion))
 ).slice(0, 5);
     index = 0;
     hp = 3;
