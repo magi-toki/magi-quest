@@ -4266,18 +4266,19 @@ if (backButton) {
 
     $('typing-description').textContent = ko
       ? '떨어지는 글자의 발음을 입력해 적을 물리치세요!'
-      : '落ちてくる文字の読みを入力して、敵をたおそう！';
+      : '落ちてくる文字の読みを入力して敵をたおそう！';
 
         const choiceMode = isMobileChoiceMode();
 
-   $('typing-question').textContent = choiceMode
+   const isPlaying = game.classList.contains('typing-playing');
+
+$('typing-question').textContent = choiceMode
   ? (ko
-      ? '떨어지는 일본어 단어의 발음을 한글로 골라 주세요!'
-      : '落ちてくる言葉のよみを選んでね！')
+      ? '위에서 떨어지는 단어의 발음을 선택해 주세요!'
+      : '上から落ちてくる言葉のよみを選んでください！')
   : (ko
       ? '일본어 발음을 한글로 입력하세요!'
       : '落ちてくる韓国語の読みを入力してね！');
-
     input.placeholder = ko
       ? '한글로 입력'
       : 'ひらがな / カタカナで入力';
